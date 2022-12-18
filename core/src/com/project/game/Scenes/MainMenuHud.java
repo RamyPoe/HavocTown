@@ -3,6 +3,7 @@ package com.project.game.Scenes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -17,9 +18,14 @@ import com.project.game.MainGame;
 
 public class MainMenuHud implements Disposable {
     
+    // Stage setup
     public Stage stage;
     public Viewport viewport;
     private OrthographicCamera cam;
+
+    // Assets
+    public Texture backgroundTexture;
+
 
     public MainMenuHud(SpriteBatch sb) {
 
@@ -29,6 +35,9 @@ public class MainMenuHud implements Disposable {
 
         // Stage
         stage = new Stage(viewport, sb);
+
+        // Background image
+        backgroundTexture = new Texture(Gdx.files.internal("maps/1.jpg"));
 
         // Font and Label
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/menu-font.ttf"));
@@ -54,6 +63,21 @@ public class MainMenuHud implements Disposable {
         // Add table to stage
         stage.addActor(table);
 
+        
+    }
+
+    public void draw(float delta) {
+
+        // Get batch ready
+        stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
+        
+        // Draw background image
+        stage.getBatch().begin();
+        stage.getBatch().draw(backgroundTexture, 0, 0, MainGame.V_WIDTH, MainGame.V_HEIGHT);
+        stage.getBatch().end();
+        
+        // Draw GUI
+        stage.draw();
     }
 
     @Override
