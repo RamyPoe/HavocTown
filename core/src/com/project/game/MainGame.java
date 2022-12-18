@@ -1,31 +1,43 @@
 package com.project.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.project.game.Screens.MainMenuScreen;
 
-public class MainGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+public class MainGame extends Game {
+
+	// Screen Constants
+	public static final int V_WIDTH = 1536;
+	public static final int V_HEIGHT = 864;
+
+	// For drawing images
+	public SpriteBatch batch;
+
 	
 	@Override
 	public void create () {
+
+		// Batch used for drawing
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+
+		// Start with MainMenuScreen
+		setScreen(
+			new MainMenuScreen(this)
+		);
+
 	}
 
 	@Override
 	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		super.render();
 	}
 	
 	@Override
 	public void dispose () {
+		super.dispose();
 		batch.dispose();
-		img.dispose();
 	}
 }
