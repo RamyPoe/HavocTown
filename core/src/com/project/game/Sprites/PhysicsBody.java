@@ -3,7 +3,9 @@ package com.project.game.Sprites;
 public class PhysicsBody {
     
     // Constants
-    public static final int DRAG_CONSTANT = 1;
+    public double DRAG_CONSTANT;
+    public double DRAG_DEGREE;
+    public double ACCELERATION_FACTOR;
 
     // Position
     private double dx, dy;
@@ -17,25 +19,37 @@ public class PhysicsBody {
     public PhysicsBody(double dx, double dy) {
         this.dx = dx;
         this.dy = dy;
+
+        // Default Values
+        DRAG_CONSTANT = 1;
+        DRAG_DEGREE = 1;
+        ACCELERATION_FACTOR = 1;
     }
 
     // Change velocity
     public void applyForceY(double a) { vy += a; }
     public void applyForceX(double a) { vx += a; }
 
-    // Apply friction to give gradual slow down and limit velocity
-    public void applyFrictionX() {
+    // Apply friction to give gradual slow down
+    public void applyFrictionX(float dt) {
 
         applyForceX(
-            0.5 * DRAG_CONSTANT * (
-                vx > 0 ? -(vx*vx) : (vx*vx)
+            dt * 60 * DRAG_CONSTANT * (
+                vx > 0 ? -(DRAG_CONSTANT * (Math.pow(vx, DRAG_DEGREE)+1)) : +(DRAG_CONSTANT * (Math.pow(-vx, DRAG_DEGREE)+1))
             )
         );
 
     }
     
-    // Update position using velocities
-    public void update() {
+    // Update position
+    public void update(float dt) {
+
+        // Respect max speed bounds
+        if (vx > max_vx * dt*60) { vx = max_vx * dt*60; }
+        else if (vx < -max_vx * dt*60) { vx = -max_vx * dt*60; }
+    
+
+        // Displace with velocities
         dx += vx;
         dy += vy;
     }

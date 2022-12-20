@@ -61,21 +61,29 @@ public class GameScreen implements Screen {
     // Game logic
     public void update(float delta) {
         
-        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
-            player.pBody.applyForceX(10);
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
-            player.pBody.applyForceX(-10);
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-            player.pBody.applyForceY(-10);
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            player.pBody.applyForceY(10);
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            player.moveLeft(delta);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player.moveRight(delta);
         }
 
+
+
         // To gradually slow down
-        // player.pBody.applyFrictionX();
+        // if (
+        //     !Gdx.input.isKeyPressed(Input.Keys.LEFT) &&
+        //     !Gdx.input.isKeyPressed(Input.Keys.RIGHT)
+        // ) {
+
+            
+        // }
+        
+
+
 
         // Update player position for drawing
-        player.update();
+        player.update(delta);
 
     }
 
