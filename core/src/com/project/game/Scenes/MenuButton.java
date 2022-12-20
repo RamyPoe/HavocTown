@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
+import com.project.game.Screens.MainMenuScreen.BUTTONS;
 
 public class MenuButton extends TextButton {
 
@@ -50,6 +51,7 @@ public class MenuButton extends TextButton {
         });
 
     }
+
 
     public static void loadButtonFont(String path) {
         // File handle
@@ -90,6 +92,7 @@ public class MenuButton extends TextButton {
     public static void dispose() {
         buttonFont.dispose();
         descriptionFont.dispose();
+
     }
 
 }

@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
+import com.project.game.Screens.TutorialScreen;
 
 public class MainMenuHud implements Disposable {
     
@@ -32,6 +33,12 @@ public class MainMenuHud implements Disposable {
 
     // Assets
     public Texture backgroundTexture;
+
+    // Buttons
+    public MenuButton campaignGameButton;
+    public MenuButton customGameButton;
+    public MenuButton tutorialGameButton;
+    public MenuButton settingsButton;
 
 
     public MainMenuHud(SpriteBatch sb) {
@@ -46,30 +53,16 @@ public class MainMenuHud implements Disposable {
         // Background image
         backgroundTexture = new Texture(Gdx.files.internal("maps/1.jpg"));
 
-
-        // Label
-        /*
-        Label.LabelStyle style = new Label.LabelStyle(bFont, Color.WHITE);
-        Label lbl = new Label("HELLO WORLD!", style);
-        */
-
         // Setup for buttons
         MenuButton.loadButtonFont("fonts/menu-font");
 
         // Buttons
-        MenuButton campaignGameButton = new MenuButton("CAMPAIGN", "story mode");
-        MenuButton customGameButton = new MenuButton("CUSTOM GAME", "custom game");
+        campaignGameButton = new MenuButton("CAMPAIGN", "story mode");
+        customGameButton = new MenuButton("CUSTOM GAME", "custom game");
+        tutorialGameButton = new MenuButton("TUTORIAL", "learn game controls");
+        settingsButton = new MenuButton("SETTINGS", "change game settings");
 
-
-        // Button Callbacks
-        campaignGameButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("CAMPAIGN CLICKED!");
-            }
-        });
         
-
 
         // Table
         Table table = new Table();
@@ -85,6 +78,10 @@ public class MainMenuHud implements Disposable {
         table.add(campaignGameButton).align(Align.right);
         table.row();
         table.add(customGameButton).align(Align.right);
+        table.row();
+        table.add(tutorialGameButton).align(Align.right);
+        table.row();
+        table.add(settingsButton).align(Align.right);
 
         // Add table to stage
         stage.addActor(table);

@@ -3,6 +3,9 @@ package com.project.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Cursor.SystemCursor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Screen;
 import com.project.game.MainGame;
@@ -10,6 +13,10 @@ import com.project.game.Scenes.MainMenuHud;
 
 public class MainMenuScreen implements Screen {
     
+    // For reacting to buttons
+    public static enum BUTTONS {BTN_NONE, BTN_CAMPAIGN, BTN_CUSTOM_GAME, BTN_TUTORIAL, BTN_SETTINGS};
+    private BUTTONS buttonPressed = BUTTONS.BTN_NONE;
+
     // To change screens
     private MainGame game;
 
@@ -27,15 +34,80 @@ public class MainMenuScreen implements Screen {
         // Add Hud
         hud = new MainMenuHud(game.batch);
 
+        // Button Callbacks
+        hud.campaignGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Change button pressed
+                buttonPressed = BUTTONS.BTN_CAMPAIGN;
+            }
+        });
+        hud.customGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Change button pressed
+                buttonPressed = BUTTONS.BTN_CUSTOM_GAME;
+            }
+        });
+        hud.tutorialGameButton.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                // Change button pressed
+                buttonPressed = BUTTONS.BTN_TUTORIAL;
+            }
+        });
+        hud.settingsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("SETTINGS CLICKED!");
+                // Change button pressed
+                buttonPressed = BUTTONS.BTN_SETTINGS;
+            }
+        });
+
     }
+
 
     @Override
     public void show() {
 
     }
 
+    // Handles logic
+    public void update(float delta) {
+
+        // Check for button press
+
+        switch (buttonPressed) {
+
+            case BTN_CAMPAIGN:
+                break;
+
+            case BTN_CUSTOM_GAME:
+                break;
+
+            case BTN_TUTORIAL:
+                TutorialScreen tScreen = new TutorialScreen(game);
+                game.setScreen(tScreen.getGameScreen());
+                break;
+                
+            case BTN_SETTINGS:
+                break;
+
+            default:
+                break;
+            
+        }
+
+    }
+
+
     @Override
     public void render(float delta) {
+
+        // Seperate logic from rendering
+        update(delta);
 
         // Reset screen
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -69,6 +141,8 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
+        dispose();
+        hud.dispose();
     }
 
 }
