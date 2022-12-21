@@ -8,10 +8,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
 import com.project.game.Sprites.CustomEntity;
+import com.project.game.World.GameWorld;
 
 public class GameScreen implements Screen {
 
@@ -21,12 +23,13 @@ public class GameScreen implements Screen {
     // For prespective
     private OrthographicCamera cam;
     private Viewport viewport;
+    public static final float CAM_SPEED_FACTOR = 2.2f;
+
+    // Handle game logic
+    GameWorld gameWorld;
 
     // Background image
     Texture backgroundTexture;
-
-    // Hold all sprites
-    private Stage stage;
 
     // Player
     CustomEntity player;
@@ -40,15 +43,14 @@ public class GameScreen implements Screen {
         cam = new OrthographicCamera();
         viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, cam);
 
-        // Create stage
-        stage = new Stage(viewport, game.batch);
-
         // Load background texture
         backgroundTexture = new Texture(Gdx.files.internal("maps/2.jpg"));
 
+        // Create world
+        gameWorld = new GameWorld();
+
         // Create player
         player = new CustomEntity();
-        // stage.addActor( (Sprite) player);
 
     }
 
@@ -62,28 +64,30 @@ public class GameScreen implements Screen {
     public void update(float delta) {
         
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.moveLeft(delta);
+            player.moveLeft();
+            // cam.zoom -= 0.002f;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.moveRight(delta);
+            player.moveRight();
+            // cam.zoom += 0.002f;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            player.pBody.applyForceY(4);
         }
 
-
-
-        // To gradually slow down
-        // if (
-        //     !Gdx.input.isKeyPressed(Input.Keys.LEFT) &&
-        //     !Gdx.input.isKeyPressed(Input.Keys.RIGHT)
-        // ) {
-
-            
-        // }
-        
-
-
+        // Apply gravity
+        player.applyGravity();
 
         // Update player position for drawing
         player.update(delta);
+
+        // Check for world collisions
+        gameWorld.checkPlayer(player);
+
+
+        // Camera should show all players
+        cam.position.x += (player.getX() - cam.position.x) * CAM_SPEED_FACTOR * delta;
+        cam.position.y += (player.getY() - cam.position.y) * CAM_SPEED_FACTOR * delta;
 
     }
 
@@ -93,16 +97,21 @@ public class GameScreen implements Screen {
         // Seperate logic from render
         update(delta);
 
+        // Camera
+        cam.update();
+
         // Reset screen
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         
         // Prepare to draw
+        game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
         
         // Draw
         game.batch.draw(backgroundTexture, 0, 0, MainGame.V_WIDTH, MainGame.V_HEIGHT);
         player.draw(game.batch);
+        gameWorld.draw(game.batch);
 
         // Done drawing
         game.batch.end();

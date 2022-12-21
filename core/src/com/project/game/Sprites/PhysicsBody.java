@@ -31,10 +31,10 @@ public class PhysicsBody {
     public void applyForceX(double a) { vx += a; }
 
     // Apply friction to give gradual slow down
-    public void applyFrictionX(float dt) {
+    public void applyFrictionX() {
 
         applyForceX(
-            dt * 60 * DRAG_CONSTANT * (
+            DRAG_CONSTANT * (
                 vx > 0 ? -(DRAG_CONSTANT * (Math.pow(vx, DRAG_DEGREE)+1)) : +(DRAG_CONSTANT * (Math.pow(-vx, DRAG_DEGREE)+1))
             )
         );
@@ -45,13 +45,13 @@ public class PhysicsBody {
     public void update(float dt) {
 
         // Respect max speed bounds
-        if (vx > max_vx * dt*60) { vx = max_vx * dt*60; }
-        else if (vx < -max_vx * dt*60) { vx = -max_vx * dt*60; }
+        if (vx > max_vx) { vx = max_vx; }
+        else if (vx < -max_vx) { vx = -max_vx; }
     
 
         // Displace with velocities
-        dx += vx;
-        dy += vy;
+        dx += vx * 60 * dt;
+        dy += vy * 60 * dt;
     }
     
 
