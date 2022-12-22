@@ -3,7 +3,7 @@ package com.project.game.Sprites;
 public class Hitbox {
     
     // From bottom-left
-    double x, y, w, h;
+    public double x, y, w, h;
 
     // Constructor
     public Hitbox(double x, double y, double w, double h) {

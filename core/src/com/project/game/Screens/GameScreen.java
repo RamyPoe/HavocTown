@@ -29,7 +29,7 @@ public class GameScreen implements Screen {
     GameWorld gameWorld;
 
     // Background image
-    Texture backgroundTexture;
+    Parallax backgroundParallax;
 
     // Player
     CustomEntity player;
@@ -41,16 +41,23 @@ public class GameScreen implements Screen {
 
         // For prespective
         cam = new OrthographicCamera();
+        // cam.zoom = 1.3f;
         viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, cam);
 
         // Load background texture
-        backgroundTexture = new Texture(Gdx.files.internal("maps/2.jpg"));
+        backgroundParallax = new Parallax(
+            "maps/a1.png",
+            "maps/a2.png",
+            "maps/a3.png"
+        );
+
+        
 
         // Create world
         gameWorld = new GameWorld();
 
         // Create player
-        player = new CustomEntity();
+        player = new CustomEntity(MainGame.V_WIDTH/2, MainGame.V_HEIGHT);
 
     }
 
@@ -65,14 +72,15 @@ public class GameScreen implements Screen {
         
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             player.moveLeft();
-            // cam.zoom -= 0.002f;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.moveRight();
-            // cam.zoom += 0.002f;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            player.pBody.applyForceY(4);
+            player.pBody.applyForceY(10);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            player.passThroughPlatform();
         }
 
         // Apply gravity
@@ -86,7 +94,7 @@ public class GameScreen implements Screen {
 
 
         // Camera should show all players
-        cam.position.x += (player.getX() - cam.position.x) * CAM_SPEED_FACTOR * delta;
+        cam.position.x += (player.getX() - cam.position.x) * CAM_SPEED_FACTOR/3 * delta;
         cam.position.y += (player.getY() - cam.position.y) * CAM_SPEED_FACTOR * delta;
 
     }
@@ -109,9 +117,11 @@ public class GameScreen implements Screen {
         game.batch.begin();
         
         // Draw
-        game.batch.draw(backgroundTexture, 0, 0, MainGame.V_WIDTH, MainGame.V_HEIGHT);
+        backgroundParallax.draw(game.batch, cam);
         player.draw(game.batch);
-        gameWorld.draw(game.batch);
+
+        // Debug
+        // gameWorld.draw(game.batch);
 
         // Done drawing
         game.batch.end();

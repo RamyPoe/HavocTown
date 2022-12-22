@@ -10,12 +10,14 @@ public class CustomEntity extends Sprite {
     
     // Player parts
 
-    // For movement
+    // For movement/collision
     public PhysicsBody pBody;
     public Hitbox hBox;
+    public boolean wants_to_pass_through = false;
+
 
     // Constructor
-    public CustomEntity() {
+    public CustomEntity(float x, float y) {
         
         // Initialize sprite
         super(
@@ -30,7 +32,9 @@ public class CustomEntity extends Sprite {
 
         // Configure physics
         pBody.setMax_vx(3);
-        pBody.setMax_vy(10);
+        pBody.setMax_vy(4);
+        pBody.setDx(x);
+        pBody.setDy(y);
 
         pBody.DRAG_CONSTANT = 0.2;
         pBody.DRAG_DEGREE = 0.8;
@@ -47,6 +51,11 @@ public class CustomEntity extends Sprite {
 
     }
     
+    // For pass through platforms
+    public void passThroughPlatform() {
+        wants_to_pass_through = true;
+    }
+
 
     // Apply movements
     public void moveLeft() {
@@ -86,8 +95,6 @@ public class CustomEntity extends Sprite {
             (float) pBody.getDx(),
             (float) pBody.getDy()
         );
-
-        // System.out.println("VX: " + pBody.getVx());
 
     }
     
