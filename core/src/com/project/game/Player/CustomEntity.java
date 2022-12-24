@@ -1,4 +1,4 @@
-package com.project.game.Sprites;
+package com.project.game.Player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,26 +6,38 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.project.game.MainGame;
 
-public class CustomEntity extends Sprite {
+public class CustomEntity {
     
+    // Player constants
+    public static float P_WIDTH = 65;
+    public static float P_HEIGHT = 102;
+    public static short MAX_JUMPS = 999;
+
     // Player parts
+    Feet p_feet;
+    Body p_body;
+    Head p_head;
 
     // For movement/collision
     public PhysicsBody pBody;
     public Hitbox hBox;
+
+    // Player logic
     public boolean wants_to_pass_through = false;
+    public short jumps = 0;
+
+    // True facing right, False facing left
+    public boolean flip;
 
 
     // Constructor
-    public CustomEntity(float x, float y) {
+    public CustomEntity(float x, float y, PlayerConfig config) {
         
-        // Initialize sprite
-        super(
-            new Texture(Gdx.files.internal("skins/blue.jpg"))
-        );
-
-        // Set size
-        this.setSize(50, 80);
+        // Initialize character parts
+        p_feet = new Feet(config);
+        p_body = new Body(config);
+        p_head = new Head(config);
+        
 
         // Enable physics body
         pBody = new PhysicsBody(MainGame.V_WIDTH/2, MainGame.V_HEIGHT/2);
@@ -44,13 +56,28 @@ public class CustomEntity extends Sprite {
         hBox = new Hitbox(
             pBody.getDx(),
             pBody.getDy(),
-            50d,
-            80d
+            P_WIDTH,
+            P_HEIGHT
         );
 
 
     }
     
+
+
+    // Drawing with animations
+    public void draw(Batch sb) {
+
+        // Body w/ shirt
+        p_body.draw(sb, getX(), getY(), flip);
+
+        // Head w/ face & hat
+        p_head.draw(sb, getX(), getY(), flip);
+
+
+    }
+
+
     // For pass through platforms
     public void passThroughPlatform() {
         wants_to_pass_through = true;
@@ -60,19 +87,19 @@ public class CustomEntity extends Sprite {
     // Apply movements
     public void moveLeft() {
         pBody.applyForceX(-10 * pBody.ACCELERATION_FACTOR);
+        flip = false;
     }
     public void moveRight() {
         pBody.applyForceX(10 * pBody.ACCELERATION_FACTOR);
+        flip = true;
     }
 
     // Changing position
     public void setPosX(double x) {
         pBody.setDx(x);
-        this.setX( (float) x);
     }
     public void setPosY(double y) {
         pBody.setDy(y);
-        this.setY( (float) y);
     }
 
     // Apply gravity
@@ -90,13 +117,11 @@ public class CustomEntity extends Sprite {
         // Update collisions body
         hBox.updatePos(pBody.getDx(), pBody.getDy());
 
-        // Get position from physics body
-        this.setPosition(
-            (float) pBody.getDx(),
-            (float) pBody.getDy()
-        );
-
     }
+
+    // Getters for drawing
+    public float getX() { return (float) pBody.getDx(); }
+    public float getY() { return (float) pBody.getDy(); }
     
 
 }

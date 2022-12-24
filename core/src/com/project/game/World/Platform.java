@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.project.game.MainGame;
-import com.project.game.Sprites.Hitbox;
+import com.project.game.Player.Hitbox;
 
 public class Platform extends Sprite {
     

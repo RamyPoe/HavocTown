@@ -88,6 +88,10 @@ public class MainMenuScreen implements Screen {
             return;
         }
 
+        if (buttonPressed != BUTTONS.BTN_TUTORIAL) {
+            return;
+        }
+
         // Fade out if button pressed
         game.transition.fadeOut();
         game.transition.haveFadedIn = false;

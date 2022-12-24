@@ -12,7 +12,8 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
-import com.project.game.Sprites.CustomEntity;
+import com.project.game.Player.CustomEntity;
+import com.project.game.Player.PlayerConfig;
 import com.project.game.World.GameWorld;
 import com.project.game.World.Parallax;
 import com.project.game.World.WorldConfig;
@@ -29,19 +30,21 @@ public class GameScreen implements Screen {
 
     // Handle game logic
     GameWorld gameWorld;
-    WorldConfig config;
-
+    WorldConfig wConfig;
+    
     // Background image
     Parallax backgroundParallax;
-
+    
     // Player
     CustomEntity player;
+    PlayerConfig pConfig;
 
-    public GameScreen(MainGame game, WorldConfig config) {
+    public GameScreen(MainGame game, WorldConfig wConfig, PlayerConfig pConfig) {
 
         // Save game instance
         this.game = game;
-        this.config = config;
+        this.wConfig = wConfig;
+        this.pConfig = pConfig;
 
         // For prespective
         cam = new OrthographicCamera();
@@ -49,16 +52,16 @@ public class GameScreen implements Screen {
 
         // Load background texture
         backgroundParallax = new Parallax(
-            "maps/" + config.getTexturePrefix() + "1.png", config.getOffY1(),
-            "maps/" + config.getTexturePrefix() + "2.png", config.getOffY2(),
-            "maps/" + config.getTexturePrefix() + "3.png", config.getOffY3()
+            "maps/" + wConfig.getTexturePrefix() + "1.png", wConfig.getOffY1(),
+            "maps/" + wConfig.getTexturePrefix() + "2.png", wConfig.getOffY2(),
+            "maps/" + wConfig.getTexturePrefix() + "3.png", wConfig.getOffY3()
         );
 
         // Create world
-        gameWorld = new GameWorld(config);
+        gameWorld = new GameWorld(wConfig);
 
         // Create player
-        player = new CustomEntity(-25, MainGame.V_HEIGHT*2);
+        player = new CustomEntity(-25, MainGame.V_HEIGHT*2, pConfig);
 
         // Starting camera position
         cam.position.x = (float) player.pBody.getDx();
@@ -83,7 +86,9 @@ public class GameScreen implements Screen {
             player.moveRight();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            player.pBody.applyForceY(10);
+            if (player.jumps > 0)
+                player.pBody.applyForceY(10);
+                player.jumps--;
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             player.passThroughPlatform();
@@ -127,7 +132,7 @@ public class GameScreen implements Screen {
         player.draw(game.batch);
 
         // Debug
-        // gameWorld.draw(game.batch);
+        gameWorld.draw(game.batch);
 
         // Done drawing
         game.batch.end();

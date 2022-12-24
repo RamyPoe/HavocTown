@@ -1,4 +1,4 @@
-package com.project.game.Sprites;
+package com.project.game.Player;
 
 public class PhysicsBody {
     

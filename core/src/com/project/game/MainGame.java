@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.project.game.Player.PlayerConfig;
 import com.project.game.Screens.GameScreen;
 import com.project.game.Screens.MainMenuScreen;
 import com.project.game.Transition.Transition;
@@ -93,12 +94,14 @@ public class MainGame extends Game {
 					WorldConfig.writeConfigFile(config);
 					*/
 					
-					WorldConfig config = WorldConfig.readConfigFile("a");
+					WorldConfig wConfig = WorldConfig.readConfigFile("b");
+					PlayerConfig pConfig = new PlayerConfig();
 
 					setScreen(
 						new GameScreen(
 							this,
-							config
+							wConfig,
+							pConfig
 						)
 					);
 				
