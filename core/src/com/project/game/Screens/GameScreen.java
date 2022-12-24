@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
 import com.project.game.Sprites.CustomEntity;
 import com.project.game.World.GameWorld;
+import com.project.game.World.Parallax;
+import com.project.game.World.WorldConfig;
 
 public class GameScreen implements Screen {
 
@@ -27,6 +29,7 @@ public class GameScreen implements Screen {
 
     // Handle game logic
     GameWorld gameWorld;
+    WorldConfig config;
 
     // Background image
     Parallax backgroundParallax;
@@ -34,30 +37,33 @@ public class GameScreen implements Screen {
     // Player
     CustomEntity player;
 
-    public GameScreen(MainGame game) {
+    public GameScreen(MainGame game, WorldConfig config) {
 
         // Save game instance
         this.game = game;
+        this.config = config;
 
         // For prespective
         cam = new OrthographicCamera();
-        // cam.zoom = 1.3f;
         viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, cam);
 
         // Load background texture
         backgroundParallax = new Parallax(
-            "maps/a1.png",
-            "maps/a2.png",
-            "maps/a3.png"
+            "maps/" + config.getTexturePrefix() + "1.png", config.getOffY1(),
+            "maps/" + config.getTexturePrefix() + "2.png", config.getOffY2(),
+            "maps/" + config.getTexturePrefix() + "3.png", config.getOffY3()
         );
 
-        
-
         // Create world
-        gameWorld = new GameWorld();
+        gameWorld = new GameWorld(config);
 
         // Create player
-        player = new CustomEntity(MainGame.V_WIDTH/2, MainGame.V_HEIGHT);
+        player = new CustomEntity(-25, MainGame.V_HEIGHT*2);
+
+        // Starting camera position
+        cam.position.x = (float) player.pBody.getDx();
+        cam.position.y = (float) player.pBody.getDy();
+
 
     }
 
@@ -93,7 +99,7 @@ public class GameScreen implements Screen {
         gameWorld.checkPlayer(player);
 
 
-        // Camera should show all players
+        // TODO: Camera should show all players
         cam.position.x += (player.getX() - cam.position.x) * CAM_SPEED_FACTOR/3 * delta;
         cam.position.y += (player.getY() - cam.position.y) * CAM_SPEED_FACTOR * delta;
 
@@ -125,6 +131,11 @@ public class GameScreen implements Screen {
 
         // Done drawing
         game.batch.end();
+
+        // Transition screen
+        if (!game.transition.haveFadedIn)
+            game.transition.fadeIn();
+        game.transition.draw();
         
     }
 

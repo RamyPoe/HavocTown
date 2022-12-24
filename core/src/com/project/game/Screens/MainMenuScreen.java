@@ -77,8 +77,35 @@ public class MainMenuScreen implements Screen {
     // Handles logic
     public void update(float delta) {
 
-        // Check for button press
+        
+        // Skip button check if transitioning
+        if (game.transition.active) {
+            return;
+        }
 
+        // If button hasn't been pressed
+        if (buttonPressed == BUTTONS.BTN_NONE) {
+            return;
+        }
+
+        // Fade out if button pressed
+        game.transition.fadeOut();
+        game.transition.haveFadedIn = false;
+
+    }
+
+    // Changing screens based on button press
+    private void checkChangeScreen() {
+        
+        // Haven't finished fading out
+        if (!game.transition.haveFadedOut) {
+            return;
+        }
+
+        // Don't repeat next frame
+        game.transition.haveFadedOut = false;
+
+        // Change to appropriate screen
         switch (buttonPressed) {
 
             case BTN_CAMPAIGN:
@@ -88,8 +115,7 @@ public class MainMenuScreen implements Screen {
                 break;
 
             case BTN_TUTORIAL:
-                TutorialScreen tScreen = new TutorialScreen(game);
-                game.setScreen(tScreen.getGameScreen());
+                game.setScreenTutorial();                
                 break;
                 
             case BTN_SETTINGS:
@@ -99,9 +125,7 @@ public class MainMenuScreen implements Screen {
                 break;
             
         }
-
     }
-
 
     @Override
     public void render(float delta) {
@@ -115,6 +139,12 @@ public class MainMenuScreen implements Screen {
 
         // Draw all stage actors
         hud.draw(delta);
+
+        // Draw transition
+        game.transition.draw();
+
+        // Change screens
+        checkChangeScreen();
 
         
     }

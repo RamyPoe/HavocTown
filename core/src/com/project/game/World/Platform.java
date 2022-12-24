@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.project.game.MainGame;
 import com.project.game.Sprites.Hitbox;
 
 public class Platform extends Sprite {
@@ -23,7 +24,7 @@ public class Platform extends Sprite {
 
         // Super
         super(
-            createTexture((int)w, (int)h, Color.RED)
+            MainGame.createTexture((int)w, (int)h, Color.RED)
         );
         this.setSize(w, h);
 
@@ -38,16 +39,6 @@ public class Platform extends Sprite {
         hBox = new Hitbox(x, y, w, h);
 
 
-    }
-
-    // So we can draw it
-    private static Texture createTexture(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fillRectangle(0, 0, width, height);
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-        return texture;
     }
 
 }

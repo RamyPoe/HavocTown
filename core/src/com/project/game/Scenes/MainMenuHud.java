@@ -22,7 +22,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
-import com.project.game.Screens.TutorialScreen;
 
 public class MainMenuHud implements Disposable {
     

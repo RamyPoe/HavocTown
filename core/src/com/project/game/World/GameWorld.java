@@ -14,28 +14,19 @@ public class GameWorld {
     ArrayList<Platform> platforms;
 
     // Constructor
-    public GameWorld() {
+    public GameWorld(WorldConfig config) {
 
         // Create array
         platforms = new ArrayList<>();
 
         // Add the platforms
-        platforms.add(
-            new Platform(0, 460, 1640, 40, false)
-        );
-        platforms.add(
-            new Platform(45, 630, 1350, 40, true)
-        );
-        platforms.add(
-            new Platform(115, 800, 1060, 40, true)
-        );
-        platforms.add(
-            new Platform(155, 962, 730, 40, true)
-        );
-        platforms.add(
-            new Platform(215, 1130, 400, 40, true)
-        );
+        for (Box b : config.getPlatformArray()) {
 
+            platforms.add(
+                new Platform(b.x, b.y, b.w, b.h, b.passable)
+            );
+
+        }
 
     }
 

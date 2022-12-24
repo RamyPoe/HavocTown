@@ -1,0 +1,40 @@
+{
+"texturePrefix": "b",
+"platforms": [
+	{
+		"x": -825,
+		"y": 460,
+		"w": 1640,
+		"h": 40,
+		"passable": false
+	},
+	{
+		"x": -780,
+		"y": 630,
+		"w": 1350,
+		"h": 40,
+		"passable": true
+	},
+	{
+		"x": -710,
+		"y": 800,
+		"w": 1060,
+		"h": 40,
+		"passable": true
+	},
+	{
+		"x": -670,
+		"y": 962,
+		"w": 730,
+		"h": 40,
+		"passable": true
+	},
+	{
+		"x": -610,
+		"y": 1130,
+		"w": 400,
+		"h": 40,
+		"passable": true
+	}
+]
+}
