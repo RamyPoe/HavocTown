@@ -33,6 +33,9 @@ public class GameWorld {
     // For player movements
     public void checkPlayer(CustomEntity p) {
 
+        // Assume we don't touch a platform
+        p.grounded = false;
+
         // Check for every platform
         for (Platform plat : platforms) {
 
@@ -44,11 +47,12 @@ public class GameWorld {
                 if (plat.touching) { continue; }
 
                 // Determine if collision is from above or below
-                Hitbox temp = new Hitbox(p.hBox.x+(p.pBody.getVx() > 0 ? -6 : 6), p.hBox.y-10, p.hBox.w, p.hBox.h);
+                Hitbox temp = new Hitbox(p.hBox.x+(p.pBody.getVx() > 0 ? -6 : 6), p.hBox.y-20, p.hBox.w, p.hBox.h);
                 // From above, treat as solid
                 if ((temp.isColliding(plat.hBox) && !p.wants_to_pass_through) || !plat.passable) {
 
                     // Reset jumps and velocity
+                    p.grounded = true;
                     p.jumps = CustomEntity.MAX_JUMPS;
                     p.pBody.setVy(0);
                     p.setPosY(plat.hBox.getTop());

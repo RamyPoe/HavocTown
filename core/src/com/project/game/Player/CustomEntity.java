@@ -25,6 +25,8 @@ public class CustomEntity {
     // Player logic
     public boolean wants_to_pass_through = false;
     public short jumps = 0;
+    public boolean grounded = false;
+    public boolean applying_force = false;
 
     // True facing right, False facing left
     public boolean flip;
@@ -43,14 +45,14 @@ public class CustomEntity {
         pBody = new PhysicsBody(MainGame.V_WIDTH/2, MainGame.V_HEIGHT/2);
 
         // Configure physics
-        pBody.setMax_vx(3);
+        pBody.setMax_vx(5);
         pBody.setMax_vy(4);
         pBody.setDx(x);
         pBody.setDy(y);
 
-        pBody.DRAG_CONSTANT = 0.2;
+        pBody.DRAG_CONSTANT = 0.95;
         pBody.DRAG_DEGREE = 0.8;
-        pBody.ACCELERATION_FACTOR = 3.0;
+        pBody.ACCELERATION_FACTOR = 0.2;
 
         // Collision checks
         hBox = new Hitbox(
@@ -68,11 +70,24 @@ public class CustomEntity {
     // Drawing with animations
     public void draw(Batch sb) {
 
+        // For the feet
+        p_feet.updatePos(
+            pBody.getVx(), pBody.getVy(), grounded,
+            getX(), getY(), flip,
+            applying_force
+        );
+
+        // Back foot
+        p_feet.drawBack(sb, flip);
+        
         // Body w/ shirt
         p_body.draw(sb, getX(), getY(), flip);
-
+        
         // Head w/ face & hat
-        p_head.draw(sb, getX(), getY(), flip);
+        p_head.draw(sb, getX(), getY(), flip, (float) pBody.getVy());
+
+        // Front foot
+        p_feet.drawFront(sb, flip);
 
 
     }
@@ -86,12 +101,31 @@ public class CustomEntity {
 
     // Apply movements
     public void moveLeft() {
-        pBody.applyForceX(-10 * pBody.ACCELERATION_FACTOR);
+        pBody.applyForceX(-1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6));
         flip = false;
+        applying_force = true;
     }
     public void moveRight() {
-        pBody.applyForceX(10 * pBody.ACCELERATION_FACTOR);
+        pBody.applyForceX(1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6));
         flip = true;
+        applying_force = true;
+    }
+
+    // Jumping
+    public void jump() {
+
+        if (jumps <= 0) { return; }
+
+        this.pBody.setVy(0);
+        this.pBody.applyForceY(13);
+        this.jumps--;
+
+    }
+
+    // Slow down when player isn't accelerating
+    public void applyFrictionX() {
+        this.pBody.applyFrictionX();
+        applying_force = false;
     }
 
     // Changing position
@@ -104,14 +138,14 @@ public class CustomEntity {
 
     // Apply gravity
     public void applyGravity() {
-        pBody.applyForceY(-0.2);
+        pBody.applyForceY(-0.3);
     }
 
     // Set positions
     public void update(float dt) {
 
         // Update physics body
-        pBody.applyFrictionX();
+        // pBody.applyFrictionX();
         pBody.update(dt);
 
         // Update collisions body

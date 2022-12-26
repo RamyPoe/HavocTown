@@ -85,10 +85,14 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.moveRight();
         }
+
+        if (! (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.RIGHT))) {
+            player.applyFrictionX();
+        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             if (player.jumps > 0)
-                player.pBody.applyForceY(10);
-                player.jumps--;
+                player.jump();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             player.passThroughPlatform();
@@ -132,7 +136,7 @@ public class GameScreen implements Screen {
         player.draw(game.batch);
 
         // Debug
-        gameWorld.draw(game.batch);
+        // gameWorld.draw(game.batch);
 
         // Done drawing
         game.batch.end();

@@ -33,11 +33,7 @@ public class PhysicsBody {
     // Apply friction to give gradual slow down
     public void applyFrictionX() {
 
-        applyForceX(
-            DRAG_CONSTANT * (
-                vx > 0 ? -(DRAG_CONSTANT * (Math.pow(vx, DRAG_DEGREE)+1)) : +(DRAG_CONSTANT * (Math.pow(-vx, DRAG_DEGREE)+1))
-            )
-        );
+        vx *= DRAG_CONSTANT;
 
     }
     
