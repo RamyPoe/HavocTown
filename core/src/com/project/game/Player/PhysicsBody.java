@@ -38,7 +38,7 @@ public class PhysicsBody {
     }
     
     // Update position
-    public void update(float dt) {
+    public void update() {
 
         // Respect max speed bounds
         if (vx > max_vx) { vx = max_vx; }
@@ -46,8 +46,8 @@ public class PhysicsBody {
     
 
         // Displace with velocities
-        dx += vx * 60 * dt;
-        dy += vy * 60 * dt;
+        dx += vx;
+        dy += vy;
     }
     
 

@@ -2,6 +2,7 @@ package com.project.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -69,6 +70,9 @@ public class MainGame extends Game {
 	@Override
 	public void render () {
 		
+		// Show the fps
+		Gdx.graphics.setTitle("FPS: " + String.valueOf(Gdx.graphics.getFramesPerSecond()));
+
 		// See if screen need to be changed
 		if (cur_screen != new_screen) {
 

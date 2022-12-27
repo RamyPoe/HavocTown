@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.PlayerConfig;
+import com.project.game.Weapons.GunBullet;
 import com.project.game.World.GameWorld;
 import com.project.game.World.Parallax;
 import com.project.game.World.WorldConfig;
@@ -36,7 +37,7 @@ public class GameScreen implements Screen {
     Parallax backgroundParallax;
     
     // Player
-    CustomEntity player;
+    CustomEntity player, player2;
     PlayerConfig pConfig;
 
     public GameScreen(MainGame game, WorldConfig wConfig, PlayerConfig pConfig) {
@@ -62,6 +63,12 @@ public class GameScreen implements Screen {
 
         // Create player
         player = new CustomEntity(-25, MainGame.V_HEIGHT*2, pConfig);
+        gameWorld.addPlayer(player);
+
+        // Player 2 for testing
+        
+        player2 = new CustomEntity(-125, MainGame.V_HEIGHT*2, pConfig);
+        gameWorld.addPlayer(player2);
 
         // Starting camera position
         cam.position.x = (float) player.pBody.getDx();
@@ -98,14 +105,38 @@ public class GameScreen implements Screen {
             player.passThroughPlatform();
         }
 
-        // Apply gravity
-        player.applyGravity();
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            player.shoot(gameWorld.getBulletArray());
+        }
 
-        // Update player position for drawing
-        player.update(delta);
+
+        // PLAYER 2
+        //============================================
+        
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            player2.moveLeft();
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            player2.moveRight();
+        }
+
+        if (! (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D))) {
+            player2.applyFrictionX();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            if (player2.jumps > 0)
+                player2.jump();
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            player2.passThroughPlatform();
+        }
+
+        //============================================
+
 
         // Check for world collisions
-        gameWorld.checkPlayer(player);
+        gameWorld.step(delta);
 
 
         // TODO: Camera should show all players
@@ -131,9 +162,17 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(cam.combined);
         game.batch.begin();
         
-        // Draw
+        // Draw background
         backgroundParallax.draw(game.batch, cam);
+
+        // Draw bullets
+        for (GunBullet b : gameWorld.getBulletArray()) {
+            b.draw(game.batch);
+        }
+
+        // Draw player
         player.draw(game.batch);
+        player2.draw(game.batch);
 
         // Debug
         // gameWorld.draw(game.batch);

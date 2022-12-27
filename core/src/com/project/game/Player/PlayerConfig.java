@@ -12,6 +12,8 @@ public class PlayerConfig {
         faceSkin = 0;
         shirtSkin = -1;
         hatSkin = 2;
+
+        
     }
 
 }

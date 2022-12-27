@@ -1,10 +1,16 @@
 package com.project.game.Player;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.project.game.MainGame;
+import com.project.game.Weapons.GunBullet;
+import com.project.game.Weapons.GunLibrary;
+import com.project.game.Weapons.Weapon;
+import com.project.game.World.Platform;
 
 public class CustomEntity {
     
@@ -17,6 +23,9 @@ public class CustomEntity {
     Feet p_feet;
     Body p_body;
     Head p_head;
+
+    // Player weapon
+    Weapon weapon;
 
     // For movement/collision
     public PhysicsBody pBody;
@@ -40,6 +49,8 @@ public class CustomEntity {
         p_body = new Body(config);
         p_head = new Head(config);
         
+        // Default weapon
+        weapon = GunLibrary.rifle2();
 
         // Enable physics body
         pBody = new PhysicsBody(MainGame.V_WIDTH/2, MainGame.V_HEIGHT/2);
@@ -65,7 +76,19 @@ public class CustomEntity {
 
     }
     
+    // Try to shoot the gun
+    public void shoot(ArrayList<GunBullet> bullets) {
+        weapon.shoot(bullets, this);
+    }
 
+    // When hit by bullet
+    public void bulletHit(GunBullet b) {
+        if (b.getFlip()) {
+            pBody.applyForceX(b.getForceOverDistance());
+        } else {
+            pBody.applyForceX(-b.getForceOverDistance());
+        }
+    }
 
     // Drawing with animations
     public void draw(Batch sb) {
@@ -101,13 +124,13 @@ public class CustomEntity {
 
     // Apply movements
     public void moveLeft() {
-        pBody.applyForceX(-1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6));
-        flip = false;
+        pBody.applyForceX(-1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6) * (1f/(float)weapon.getWeight()));
+        flip = false; weapon.flip = flip;
         applying_force = true;
     }
     public void moveRight() {
-        pBody.applyForceX(1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6));
-        flip = true;
+        pBody.applyForceX(1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6) * (1f/(float)weapon.getWeight()));
+        flip = true; weapon.flip = flip;
         applying_force = true;
     }
 
@@ -142,11 +165,10 @@ public class CustomEntity {
     }
 
     // Set positions
-    public void update(float dt) {
+    public void update() {
 
         // Update physics body
-        // pBody.applyFrictionX();
-        pBody.update(dt);
+        pBody.update();
 
         // Update collisions body
         hBox.updatePos(pBody.getDx(), pBody.getDy());

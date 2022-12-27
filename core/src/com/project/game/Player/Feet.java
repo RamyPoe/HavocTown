@@ -99,9 +99,6 @@ public class Feet {
     // Draw back foot
     public void drawBack(Batch sb, boolean flip) {
 
-        // Lerp
-        
-
         // Edit Sprite
         footImage.setPosition(bx1, by1);
         footImage.setRotation(br1 * (flip ? 1 : -1));
