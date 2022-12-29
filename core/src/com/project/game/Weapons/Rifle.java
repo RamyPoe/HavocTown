@@ -5,17 +5,18 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 
 public class Rifle extends Weapon {    
 
     public Rifle(int weaponNumber, int shootTime, int weight, int recoil, int gun_length, int bulletSpeed,
-                 boolean disposable, int max_ammo, int reloadTime, float strength) {
+            boolean disposable, int max_ammo, int reloadTime, float strength, CustomEntity p) {
 
-        // Create the weapon with image
+        // Create the weapon given info
         super(
-            new Texture(Gdx.files.internal("weapons/guns/" + weaponNumber + ".png")),
-            shootTime, weight, recoil, gun_length, bulletSpeed, disposable, max_ammo, reloadTime, strength
+            weaponNumber, shootTime, weight, recoil, gun_length,bulletSpeed,
+            disposable, max_ammo, reloadTime, strength, p
         );
 
         // Save weapon number for offsets
@@ -26,8 +27,11 @@ public class Rifle extends Weapon {
     @Override
     public void shoot(ArrayList<GunBullet> bullets, CustomEntity p) {
 
+        // Super
+        super.shoot(bullets, p);
+
         // Get current time
-        long millis = System.nanoTime() / 1_000_000;
+        long millis = MainGame.getTimeMs();
 
         if (millis-time_last_shot >= shootTime && ammo > 0) {
 
@@ -36,7 +40,7 @@ public class Rifle extends Weapon {
 
             bullets.add(new GunBullet(
                 p.getX() + CustomEntity.P_WIDTH/2 + (flip ? 1 : -1) * gun_length,
-                p.getY() + 30,
+                p.getY() + 68,
                 bulletSpeed,
                 4000,
                 0,
@@ -57,34 +61,17 @@ public class Rifle extends Weapon {
             // TODO: LOSE DISPOSABLE GUNS
         }
 
-        // To be drawn
-        lightNozzle = true;
-        
-    }
-
-    // Update position for animations
-    public void update() {
-
-
-
     }
 
 
     // Draw the gun
-    public void draw(Batch sb) {
+    @Override
+    public void draw(Batch sb, CustomEntity p) {
 
         // Draw gun
-        // TODO: DRAW THE GUN
+        super.draw(sb, p);
 
-
-        // Draw nozzle
-        if (lightNozzle) {
-
-            // TODO: DRAW NOZZLE
-
-            lightNozzle = false;
-        }
 
     }
-    
+
 }

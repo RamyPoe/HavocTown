@@ -16,7 +16,6 @@ public class Platform extends Sprite {
 
     // For collisions
     Hitbox hBox;
-    boolean touching = false;
     boolean passable;
 
     // Constructor

@@ -24,7 +24,11 @@ public class Body {
     }
 
     // Drawing
-    public void draw(Batch sb, float x, float y, boolean flip) {
+    public void draw(Batch sb, CustomEntity p) {
+
+        // Get vars
+        float y = p.getY();
+        float x = p.getX();
 
         // Room to draw feet
         y += 5;
@@ -32,7 +36,7 @@ public class Body {
         // Draw
         sb.draw(bodyTexture, x, y);
         if (shirtTexture != null)
-            sb.draw(shirtTexture, flip ? x : x+shirtTexture.getWidth(), y, shirtTexture.getWidth() * (flip ? 1 : -1), shirtTexture.getHeight());
+            sb.draw(shirtTexture, p.flip ? x : x+shirtTexture.getWidth(), y, shirtTexture.getWidth() * (p.flip ? 1 : -1), shirtTexture.getHeight());
 
     }
 

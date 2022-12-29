@@ -36,6 +36,7 @@ public class CustomEntity {
     public short jumps = 0;
     public boolean grounded = false;
     public boolean applying_force = false;
+    public Platform touching;
 
     // True facing right, False facing left
     public boolean flip;
@@ -48,9 +49,6 @@ public class CustomEntity {
         p_feet = new Feet(config);
         p_body = new Body(config);
         p_head = new Head(config);
-        
-        // Default weapon
-        weapon = GunLibrary.rifle2();
 
         // Enable physics body
         pBody = new PhysicsBody(MainGame.V_WIDTH/2, MainGame.V_HEIGHT/2);
@@ -73,12 +71,25 @@ public class CustomEntity {
             P_HEIGHT
         );
 
+        // Default weapon
+        this.giveWeapon(
+            GunLibrary.rifle2(this)
+        );
+
 
     }
     
     // Try to shoot the gun
     public void shoot(ArrayList<GunBullet> bullets) {
         weapon.shoot(bullets, this);
+    }
+
+    // When assigning a weapon
+    public void giveWeapon(Weapon w) {
+        this.weapon = w;
+        this.pBody.setMax_vx(
+            5.5 - w.getWeight()*0.3
+        );
     }
 
     // When hit by bullet
@@ -94,23 +105,22 @@ public class CustomEntity {
     public void draw(Batch sb) {
 
         // For the feet
-        p_feet.updatePos(
-            pBody.getVx(), pBody.getVy(), grounded,
-            getX(), getY(), flip,
-            applying_force
-        );
+        p_feet.updatePos(this);
 
         // Back foot
         p_feet.drawBack(sb, flip);
         
         // Body w/ shirt
-        p_body.draw(sb, getX(), getY(), flip);
+        p_body.draw(sb, this);
         
         // Head w/ face & hat
-        p_head.draw(sb, getX(), getY(), flip, (float) pBody.getVy());
+        p_head.draw(sb, this);
 
         // Front foot
         p_feet.drawFront(sb, flip);
+
+        // Draw the weapon
+        weapon.draw(sb, this);
 
 
     }
@@ -124,12 +134,24 @@ public class CustomEntity {
 
     // Apply movements
     public void moveLeft() {
-        pBody.applyForceX(-1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6) * (1f/(float)weapon.getWeight()));
+        double f = -1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6);
+
+        if (Math.abs(f+pBody.getVx()) > pBody.getMax_vx()) {
+            return;
+        }
+        pBody.applyForceX(f);
+
         flip = false; weapon.flip = flip;
         applying_force = true;
     }
     public void moveRight() {
-        pBody.applyForceX(1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6) * (1f/(float)weapon.getWeight()));
+        double f = 1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6);
+
+        if (Math.abs(f+pBody.getVx()) > pBody.getMax_vx()) {
+            return;
+        }
+        pBody.applyForceX(f);
+
         flip = true; weapon.flip = flip;
         applying_force = true;
     }
@@ -147,8 +169,13 @@ public class CustomEntity {
 
     // Slow down when player isn't accelerating
     public void applyFrictionX() {
-        this.pBody.applyFrictionX();
-        applying_force = false;
+        if (applying_force) {
+            if (Math.abs(pBody.getVx()) > pBody.getMax_vx()) {
+                this.pBody.applyFrictionX();
+            }
+        } else {
+            this.pBody.applyFrictionX();
+        }
     }
 
     // Changing position

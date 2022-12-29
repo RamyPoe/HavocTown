@@ -57,6 +57,7 @@ public class GameWorld {
         // Apply gravity and check players with map
         for (CustomEntity p : players) {
             p.applyGravity();
+            p.applyFrictionX();
             p.update();
             checkPlayer(p);
         }
@@ -106,12 +107,16 @@ public class GameWorld {
         // Check for every platform
         for (Platform plat : platforms) {
 
+            // Is the right one
+            if (p.touching != null)
+                if (!p.touching.equals(plat))
+                    continue;
 
             // Check for collision
             if (p.hBox.isColliding(plat.hBox)) {
 
                 // If already touching then ignore
-                if (plat.touching) { continue; }
+                if (p.touching != null) { continue; }
 
                 // Determine if collision is from above or below
                 Hitbox temp = new Hitbox(p.hBox.x+(p.pBody.getVx() > 0 ? -6 : 6), p.hBox.y-20, p.hBox.w, p.hBox.h);
@@ -128,12 +133,12 @@ public class GameWorld {
 
 
                 // From below, pass through platform
-                plat.touching = true;
+                p.touching = plat;
                 p.wants_to_pass_through = false;
 
 
             } else {
-                plat.touching = false;
+                p.touching = null;
             }
 
         }

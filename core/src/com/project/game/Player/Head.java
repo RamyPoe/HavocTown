@@ -40,12 +40,16 @@ public class Head {
     }
 
     // Drawing
-    public void draw(Batch sb, float x, float y, boolean flip, float vy) {
+    public void draw(Batch sb, CustomEntity p) {
+
+        // Get cars
+        float y = p.getY();
+        float x = p.getX();
 
         // Calculate face animation
-        if (vy > 0) {
+        if (p.pBody.getVy() > 0) {
             face_y2 = -7;
-        } else if (vy < 0) {
+        } else if (p.pBody.getVy() < 0) {
             face_y2 = 7;
         } else {
             face_y2 = 0;
@@ -56,20 +60,20 @@ public class Head {
 
         // Offset from body
         y += CustomEntity.P_HEIGHT - 42 + animationBob();
-        x += CustomEntity.P_WIDTH/2 + (flip ? 1 : -1) * -10;
+        x += CustomEntity.P_WIDTH/2 + (p.flip ? 1 : -1) * -10;
 
         // Draw head
-        sb.draw(headTexture, x, y, headTexture.getWidth() * (flip ? 1 : -1), headTexture.getHeight());
+        sb.draw(headTexture, x, y, headTexture.getWidth() * (p.flip ? 1 : -1), headTexture.getHeight());
 
         // Draw hat
-        y += 20 + hat_offsetsY[pConfig.hatSkin]; x -= (flip ? 1 : -1) * (hatTexture.getWidth()/2 - 14 - hat_offsetsX[pConfig.hatSkin]);
+        y += 20 + hat_offsetsY[pConfig.hatSkin]; x -= (p.flip ? 1 : -1) * (hatTexture.getWidth()/2 - 14 - hat_offsetsX[pConfig.hatSkin]);
         if (hatTexture != null)
-        sb.draw(hatTexture, x, y, hatTexture.getWidth() * (flip ? 1 : -1), hatTexture.getHeight());
+        sb.draw(hatTexture, x, y, hatTexture.getWidth() * (p.flip ? 1 : -1), hatTexture.getHeight());
 
         // Draw face
-        y += face_y1 - hat_offsetsY[pConfig.hatSkin]; x += (flip ? 1 : -1) * 36;
+        y += face_y1 - hat_offsetsY[pConfig.hatSkin]; x += (p.flip ? 1 : -1) * 36;
         if (faceTexture != null)
-            sb.draw(faceTexture, x, y, faceTexture.getWidth() * (flip ? 1 : -1), faceTexture.getHeight());
+            sb.draw(faceTexture, x, y, faceTexture.getWidth() * (p.flip ? 1 : -1), faceTexture.getHeight());
 
     }
 

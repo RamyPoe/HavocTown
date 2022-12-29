@@ -55,7 +55,6 @@ public class MainGame extends Game {
 		new_screen = SCREENS.Tutorial;
 	}
 
-
 	// So we can draw things
     public static Texture createTexture(int width, int height, Color color) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
@@ -129,4 +128,10 @@ public class MainGame extends Game {
 		super.dispose();
 		batch.dispose();
 	}
+
+	// Get current time
+	public static long getTimeMs() {
+		return System.nanoTime() / 1_000_000;
+	}
+
 }

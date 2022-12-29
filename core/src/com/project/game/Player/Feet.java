@@ -34,7 +34,7 @@ public class Feet {
     }
 
     // Create positions to be drawn
-    public void updatePos(double vx, double vy, boolean grounded, float x, float y, boolean flip, boolean applying_force) {
+    public void updatePos(CustomEntity p) {
 
         // Offset
         float a = 0f;
@@ -42,7 +42,7 @@ public class Feet {
         br2 = 0f;
 
         // Walking on the ground
-        if (grounded && (Math.abs(vx) > 2 || applying_force)) {
+        if (p.grounded && (Math.abs(p.pBody.getVx()) > 2 || p.applying_force)) {
 
             // Time used for animation functions
             float t = (System.nanoTime()/1_000_000) % ANIMATION_LENGTH;
@@ -58,10 +58,10 @@ public class Feet {
         } 
         
         // In the air
-        else if (!grounded) {
+        else if (!p.grounded) {
             
             // Jumping up, point toes down
-            if (vy > 0) {
+            if (p.pBody.getVy() > 0) {
                 br2 = -60;
                 fr2 = -60;
             } 
@@ -75,24 +75,24 @@ public class Feet {
         }
 
         // Apply calculated offset
-        bx2 = x + CustomEntity.P_WIDTH/2 + (flip ? 1 : -1) * (10 - a);
-        by2 = 0 + y;
+        bx2 = p.getX() + CustomEntity.P_WIDTH/2 + (p.flip ? 1 : -1) * (10 - a);
+        by2 = 0 + p.getY();
 
         // Apply calculated offset
-        fx2 = x + CustomEntity.P_WIDTH/2 + (flip ? 1 : -1) * (-28 + a);
-        fy2 = -3 + y;
+        fx2 = p.getX() + CustomEntity.P_WIDTH/2 + (p.flip ? 1 : -1) * (-28 + a);
+        fy2 = -3 + p.getY();
 
         // For drawing after
-        footImage.setScaleX((flip ? 1 : -1));
+        footImage.setScaleX((p.flip ? 1 : -1));
 
         // Lerp
         bx1 += (bx2-bx1) * 0.7;
         by1 = by2;
-        br1 += (br2-br1) * (grounded ? 0.7 : 0.3);
+        br1 += (br2-br1) * (p.grounded ? 0.7 : 0.3);
 
         fx1 += (fx2-fx1) * 0.7;
         fy1 = fy2;
-        fr1 += (fr2-fr1) * (grounded ? 0.7 : 0.3);
+        fr1 += (fr2-fr1) * (p.grounded ? 0.7 : 0.3);
 
     }
     

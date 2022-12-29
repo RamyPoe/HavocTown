@@ -94,12 +94,11 @@ public class GameScreen implements Screen {
         }
 
         if (! (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.RIGHT))) {
-            player.applyFrictionX();
+            player.applying_force = false;
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            if (player.jumps > 0)
-                player.jump();
+            player.jump();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             player.passThroughPlatform();
@@ -121,12 +120,11 @@ public class GameScreen implements Screen {
         }
 
         if (! (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.D))) {
-            player2.applyFrictionX();
+            player2.applying_force = false;
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            if (player2.jumps > 0)
-                player2.jump();
+            player2.jump();
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             player2.passThroughPlatform();
