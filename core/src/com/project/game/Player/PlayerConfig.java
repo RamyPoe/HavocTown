@@ -8,10 +8,10 @@ public class PlayerConfig {
     public short hatSkin;
 
     public PlayerConfig() {
-        playerColorNumber = 0;
-        faceSkin = 0;
-        shirtSkin = -1;
-        hatSkin = 2;
+        playerColorNumber = 2;
+        faceSkin = 5;
+        shirtSkin = 2;
+        hatSkin = 0;
 
         
     }

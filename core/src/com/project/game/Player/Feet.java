@@ -148,6 +148,8 @@ public class Feet {
 
     }
 
-
+    // Get the offsets
+    public float getFrontX() { return fx1; }
+    public float getBackX()  { return bx1; }
 
 }

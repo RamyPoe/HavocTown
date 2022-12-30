@@ -22,7 +22,11 @@ public class GunBullet {
     private float angle;
 
     // Drawing
+    private static Texture bulletTexture;
     private Image bulletImage;
+    static {
+        bulletTexture = new Texture( Gdx.files.internal("weapons/bullets/0.png") );
+    }
 
     // Bullet logic
     public Hitbox hBox;
@@ -35,9 +39,7 @@ public class GunBullet {
         angle = flip ? angle : 180-angle;
 
         // Create image
-        Texture t = new Texture(Gdx.files.internal("weapons/bullets/0.png"));
-        bulletImage = new Image(t);
-        // bulletImage.setScaleX(trailScale * (flip ? 1 : -1));
+        bulletImage = new Image(bulletTexture);
         bulletImage.setRotation(angle);
 
         // Create hitbox
@@ -104,7 +106,7 @@ public class GunBullet {
     public void draw(Batch sb) {
 
         // Draw
-        bulletImage.setPosition(pos.x, pos.y);
+        bulletImage.setPosition(pos.x, pos.y + (flip ? -1 : 1) * bulletImage.getHeight());
         bulletImage.draw(sb, 1);
         hBox.draw(sb);
 

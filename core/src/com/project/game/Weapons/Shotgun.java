@@ -2,8 +2,7 @@ package com.project.game.Weapons;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 
 public class Shotgun extends Weapon {
@@ -42,15 +41,19 @@ public class Shotgun extends Weapon {
 
         if (millis-time_last_shot >= shootTime && ammo > 0) {
 
+            // Apply recoil to the player
+            applyRecoilForce(p);
+
+            // So we don't shoot again
             time_last_shot = millis;
             ammo--;
 
-
+            // Spawn bullets
             for (int i = 0; i < pellets; i++) {
 
                 bullets.add(new GunBullet(
-                    p.getX() + CustomEntity.P_WIDTH/2 + (flip ? 1 : -1) * gun_length,
-                    p.getY() + 30,
+                    p.getX() + (flip ? 1 : -1) * gun_length,
+                    p.getY() + 70,
                     bulletSpeed,
                     reach,
                     (spreadAngle/(float)pellets)*i - spreadAngle/2,
@@ -65,8 +68,17 @@ public class Shotgun extends Weapon {
 
         // Reload
         if (!disposable && ammo <= 0) {
-            time_last_shot = millis + reloadTime;
-            ammo = max_ammo;
+
+            if (!reloading)
+                reloadTimer = (int) MainGame.getTimeMs();
+            reloading = true;
+            
+
+            if (reloading && MainGame.getTimeMs()-reloadTimer >= reloadTime) {
+                ammo = max_ammo;
+                reloading = false;
+            }
+
         }
 
         // Lose the weapon and go back to default
@@ -74,9 +86,6 @@ public class Shotgun extends Weapon {
             // TODO: LOSE DISPOSABLE GUNS
         }
 
-        // To be drawn
-        lightNozzle = true;
-        
     }
     
 }

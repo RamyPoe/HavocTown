@@ -2,13 +2,9 @@ package com.project.game.Player;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.project.game.MainGame;
 import com.project.game.Weapons.GunBullet;
-import com.project.game.Weapons.GunLibrary;
 import com.project.game.Weapons.Weapon;
 import com.project.game.World.Platform;
 
@@ -23,6 +19,7 @@ public class CustomEntity {
     Feet p_feet;
     Body p_body;
     Head p_head;
+    Hands p_hands;
 
     // Player weapon
     Weapon weapon;
@@ -49,6 +46,7 @@ public class CustomEntity {
         p_feet = new Feet(config);
         p_body = new Body(config);
         p_head = new Head(config);
+        p_hands = new Hands(config);
 
         // Enable physics body
         pBody = new PhysicsBody(MainGame.V_WIDTH/2, MainGame.V_HEIGHT/2);
@@ -71,17 +69,15 @@ public class CustomEntity {
             P_HEIGHT
         );
 
-        // Default weapon
-        this.giveWeapon(
-            GunLibrary.rifle2(this)
-        );
-
 
     }
     
     // Try to shoot the gun
     public void shoot(ArrayList<GunBullet> bullets) {
+
+        // Shoot the bullets and apply recoil
         weapon.shoot(bullets, this);
+
     }
 
     // When assigning a weapon
@@ -90,6 +86,7 @@ public class CustomEntity {
         this.pBody.setMax_vx(
             5.5 - w.getWeight()*0.3
         );
+        w.setHandsObject(p_hands);
     }
 
     // When hit by bullet
@@ -107,6 +104,15 @@ public class CustomEntity {
         // For the feet
         p_feet.updatePos(this);
 
+        // Update Gun/Hand position
+        weapon.update(p_feet, this);
+
+        // Upadte hand position
+        p_hands.update();
+
+        // Draw the back hand
+        p_hands.drawBackHand(sb);
+
         // Back foot
         p_feet.drawBack(sb, flip);
         
@@ -120,7 +126,10 @@ public class CustomEntity {
         p_feet.drawFront(sb, flip);
 
         // Draw the weapon
-        weapon.draw(sb, this);
+        weapon.draw(sb,this);
+
+        // Draw hands
+        p_hands.drawFrontHand(sb);
 
 
     }
@@ -135,24 +144,24 @@ public class CustomEntity {
     // Apply movements
     public void moveLeft() {
         double f = -1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6);
+        flip = false; weapon.flip = flip;
 
         if (Math.abs(f+pBody.getVx()) > pBody.getMax_vx()) {
             return;
         }
         pBody.applyForceX(f);
 
-        flip = false; weapon.flip = flip;
         applying_force = true;
     }
     public void moveRight() {
         double f = 1 * pBody.ACCELERATION_FACTOR * (grounded ? 1 : 0.6);
+        flip = true; weapon.flip = flip;
 
         if (Math.abs(f+pBody.getVx()) > pBody.getMax_vx()) {
             return;
         }
         pBody.applyForceX(f);
 
-        flip = true; weapon.flip = flip;
         applying_force = true;
     }
 
@@ -191,7 +200,7 @@ public class CustomEntity {
         pBody.applyForceY(-0.3);
     }
 
-    // Set positions
+    // Set positions (called once per frame)
     public void update() {
 
         // Update physics body

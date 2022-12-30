@@ -5,16 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.PlayerConfig;
 import com.project.game.Weapons.GunBullet;
+import com.project.game.Weapons.GunLibrary;
 import com.project.game.World.GameWorld;
 import com.project.game.World.Parallax;
 import com.project.game.World.WorldConfig;
@@ -65,10 +62,17 @@ public class GameScreen implements Screen {
         player = new CustomEntity(-25, MainGame.V_HEIGHT*2, pConfig);
         gameWorld.addPlayer(player);
 
-        // Player 2 for testing
+        player.giveWeapon(
+            GunLibrary.ak47(player)
+        );
         
+        // Player 2 for testing
         player2 = new CustomEntity(-125, MainGame.V_HEIGHT*2, pConfig);
         gameWorld.addPlayer(player2);
+
+        player2.giveWeapon(
+            GunLibrary.ks23(player2)
+        );
 
         // Starting camera position
         cam.position.x = (float) player.pBody.getDx();
@@ -104,7 +108,7 @@ public class GameScreen implements Screen {
             player.passThroughPlatform();
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.L)) {
             player.shoot(gameWorld.getBulletArray());
         }
 
@@ -128,6 +132,10 @@ public class GameScreen implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             player2.passThroughPlatform();
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            player2.shoot(gameWorld.getBulletArray());
         }
 
         //============================================

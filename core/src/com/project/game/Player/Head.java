@@ -3,7 +3,6 @@ package com.project.game.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.utils.TimeUtils;
 
 public class Head {
     
@@ -11,8 +10,13 @@ public class Head {
     private static float ANIMATION_BOB_LENGTH = 2000f;
     
     // Custom offsets for the different hats
-    private static int[] hat_offsetsY = new int[]{8, 25, -11};
-    private static int[] hat_offsetsX = new int[]{3, 7, 13};
+    private static int[] hat_offsetsY = new int[]{8, 25, -11, 25, 27, -2};
+    private static int[] hat_offsetsX = new int[]{3, 7 ,  13, -5, 14, 15};
+
+
+    // Custom offsets for the different faces
+    private static int[] face_offsetsY = new int[]{0, -8, 0, -5, -22, -6};
+    private static int[] face_offsetsX = new int[]{15, -5, -13, 25, 13, 7};
 
     // Config
     PlayerConfig pConfig;
@@ -54,6 +58,8 @@ public class Head {
         } else {
             face_y2 = 0;
         }
+        face_y2 += face_offsetsY[pConfig.faceSkin];
+
 
         // Lerp
         face_y1 += (face_y2-face_y1) * 0.1;
@@ -71,9 +77,9 @@ public class Head {
         sb.draw(hatTexture, x, y, hatTexture.getWidth() * (p.flip ? 1 : -1), hatTexture.getHeight());
 
         // Draw face
-        y += face_y1 - hat_offsetsY[pConfig.hatSkin]; x += (p.flip ? 1 : -1) * 36;
+        y += face_y1 - hat_offsetsY[pConfig.hatSkin]; x += (p.flip ? 1 : -1) * (hatTexture.getWidth()/2 - 14 - hat_offsetsX[pConfig.hatSkin]);
         if (faceTexture != null)
-            sb.draw(faceTexture, x, y, faceTexture.getWidth() * (p.flip ? 1 : -1), faceTexture.getHeight());
+            sb.draw(faceTexture, x + face_offsetsX[pConfig.faceSkin] * (p.flip?1:-1), y, faceTexture.getWidth() * (p.flip ? 1 : -1), faceTexture.getHeight());
 
     }
 

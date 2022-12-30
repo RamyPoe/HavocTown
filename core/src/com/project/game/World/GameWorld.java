@@ -3,9 +3,6 @@ package com.project.game.World;
 import java.util.*;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.physics.bullet.Bullet;
-import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.Hitbox;
 import com.project.game.Weapons.GunBullet;

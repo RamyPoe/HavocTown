@@ -2,9 +2,6 @@ package com.project.game.Weapons;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 
@@ -33,14 +30,19 @@ public class Rifle extends Weapon {
         // Get current time
         long millis = MainGame.getTimeMs();
 
-        if (millis-time_last_shot >= shootTime && ammo > 0) {
+        if (millis-time_last_shot >= shootTime && ammo > 0 && !reloading) {
 
+            // Apply recoil to player
+            applyRecoilForce(p);
+
+            // So we don't shoot again
             time_last_shot = millis;
             ammo--;
 
+            // Spawn bullets
             bullets.add(new GunBullet(
-                p.getX() + CustomEntity.P_WIDTH/2 + (flip ? 1 : -1) * gun_length,
-                p.getY() + 68,
+                p.getX() + CustomEntity.P_WIDTH/2 + (flip ? 1 : -1) * (gun_length - 25),
+                p.getY() + weaponEndY + 40,
                 bulletSpeed,
                 4000,
                 0,
@@ -52,8 +54,17 @@ public class Rifle extends Weapon {
 
         // Reload
         if (!disposable && ammo <= 0) {
-            time_last_shot = millis + reloadTime;
-            ammo = max_ammo;
+
+            if (!reloading)
+                reloadTimer = (int) MainGame.getTimeMs();
+            reloading = true;
+            
+
+            if (reloading && MainGame.getTimeMs()-reloadTimer >= reloadTime) {
+                ammo = max_ammo;
+                reloading = false;
+            }
+
         }
 
         // Lose the weapon and go back to default
@@ -63,15 +74,5 @@ public class Rifle extends Weapon {
 
     }
 
-
-    // Draw the gun
-    @Override
-    public void draw(Batch sb, CustomEntity p) {
-
-        // Draw gun
-        super.draw(sb, p);
-
-
-    }
 
 }
