@@ -22,9 +22,9 @@ public class Head {
     PlayerConfig pConfig;
 
     // Textures
-    Texture headTexture;
-    Texture faceTexture;
-    Texture hatTexture;
+    Texture headTexture = null;
+    Texture faceTexture = null;
+    Texture hatTexture = null;
 
     // Aerial Face movement animation
     private float face_y1, face_y2;
@@ -72,14 +72,26 @@ public class Head {
         sb.draw(headTexture, x, y, headTexture.getWidth() * (p.flip ? 1 : -1), headTexture.getHeight());
 
         // Draw hat
-        y += 20 + hat_offsetsY[pConfig.hatSkin]; x -= (p.flip ? 1 : -1) * (hatTexture.getWidth()/2 - 14 - hat_offsetsX[pConfig.hatSkin]);
-        if (hatTexture != null)
-        sb.draw(hatTexture, x, y, hatTexture.getWidth() * (p.flip ? 1 : -1), hatTexture.getHeight());
+        if (pConfig.hatSkin != -1) {
+            sb.draw(
+                hatTexture,
+                x - (p.flip ? 1 : -1) * (hatTexture.getWidth()/2 - 14 - hat_offsetsX[pConfig.hatSkin]),
+                y + 20 + hat_offsetsY[pConfig.hatSkin],
+                hatTexture.getWidth() * (p.flip ? 1 : -1),
+                hatTexture.getHeight()
+            );
+        }
 
         // Draw face
-        y += face_y1 - hat_offsetsY[pConfig.hatSkin]; x += (p.flip ? 1 : -1) * (hatTexture.getWidth()/2 - 14 - hat_offsetsX[pConfig.hatSkin]);
-        if (faceTexture != null)
-            sb.draw(faceTexture, x + face_offsetsX[pConfig.faceSkin] * (p.flip?1:-1), y, faceTexture.getWidth() * (p.flip ? 1 : -1), faceTexture.getHeight());
+        if (pConfig.faceSkin != -1) {
+            sb.draw(
+                faceTexture,
+                x + (face_offsetsX[pConfig.faceSkin] + 2) * (p.flip?1:-1),
+                y + face_y1 + face_offsetsY[pConfig.faceSkin] + 20,
+                faceTexture.getWidth() * (p.flip ? 1 : -1),
+                faceTexture.getHeight()
+            );
+        }
 
     }
 

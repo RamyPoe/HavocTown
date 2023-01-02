@@ -20,7 +20,7 @@ public class Hitbox {
         this.w = w;
         this.h = h;
 
-        t = MainGame.createTexture((int) w, (int) h, Color.CHARTREUSE);
+        // t = MainGame.createTexture((int) w, (int) h, Color.CHARTREUSE);
     }
 
     // Collision
@@ -55,7 +55,7 @@ public class Hitbox {
     // Debug 
     public void draw(Batch sb) {
 
-        sb.draw(t, (float) x, (float) y);
+        // sb.draw(t, (float) x, (float) y);
 
     }
 

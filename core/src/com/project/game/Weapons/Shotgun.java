@@ -81,11 +81,6 @@ public class Shotgun extends Weapon {
 
         }
 
-        // Lose the weapon and go back to default
-        else if (disposable) {
-            // TODO: LOSE DISPOSABLE GUNS
-        }
-
     }
     
 }

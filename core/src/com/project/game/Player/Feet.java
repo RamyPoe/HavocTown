@@ -13,6 +13,9 @@ public class Feet {
     // Config
     PlayerConfig pConfig;
 
+    // For platform collisions
+    Hitbox hBox;
+
     // Texture
     Texture footTexture;
     Image footImage;
@@ -27,6 +30,9 @@ public class Feet {
 
     public Feet(PlayerConfig pConfig) {
         this.pConfig = pConfig;
+
+        // Create the hitbox
+        hBox = new Hitbox(0, 0, CustomEntity.P_WIDTH, 30);
 
         // Load texture based on config
         footTexture = new Texture(Gdx.files.internal("skins/feet/" + pConfig.playerColorNumber + ".png"));
@@ -146,6 +152,11 @@ public class Feet {
 
         }
 
+    }
+
+    // Update the hitbox
+    public void updateHbox(CustomEntity p) {
+        this.hBox.updatePos(p.getX(), p.getY());
     }
 
     // Get the offsets

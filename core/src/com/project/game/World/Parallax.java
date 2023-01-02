@@ -31,6 +31,11 @@ public class Parallax {
         yOff2 = y2;
         yOff3 = y3;
 
+        // Offset the offsets
+        yOff1 -= layer3.getHeight()/2;
+        yOff2 -= layer3.getHeight()/2;
+        yOff3 -= layer3.getHeight()/2;
+
     }
 
     // Draw based on where camera is

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.project.game.MainGame;
 import com.project.game.Weapons.GunBullet;
+import com.project.game.Weapons.GunLibrary;
 import com.project.game.Weapons.Weapon;
 import com.project.game.World.Platform;
 
@@ -13,7 +14,7 @@ public class CustomEntity {
     // Player constants
     public static float P_WIDTH = 65;
     public static float P_HEIGHT = 102;
-    public static short MAX_JUMPS = 999;
+    public static short MAX_JUMPS = 2;
 
     // Player parts
     Feet p_feet;
@@ -43,9 +44,9 @@ public class CustomEntity {
     public CustomEntity(float x, float y, PlayerConfig config) {
         
         // Initialize character parts
+        p_head = new Head(config);
         p_feet = new Feet(config);
         p_body = new Body(config);
-        p_head = new Head(config);
         p_hands = new Hands(config);
 
         // Enable physics body
@@ -69,6 +70,8 @@ public class CustomEntity {
             P_HEIGHT
         );
 
+        // Reset for defualt config
+        this.reset();
 
     }
     
@@ -96,6 +99,18 @@ public class CustomEntity {
         } else {
             pBody.applyForceX(-b.getForceOverDistance());
         }
+    }
+
+    // Reset player for spawning
+    public void reset() {
+
+        // Default weapon
+        this.giveWeapon(GunLibrary.pistol(this));
+
+        // Reset physics
+        this.pBody.setVx(0);
+        this.pBody.setVy(0);
+
     }
 
     // Drawing with animations
@@ -131,13 +146,17 @@ public class CustomEntity {
         // Draw hands
         p_hands.drawFrontHand(sb);
 
-
     }
 
 
     // For pass through platforms
     public void passThroughPlatform() {
         wants_to_pass_through = true;
+    }
+
+    // For platform collisions
+    public Hitbox getFeetHitbox() {
+        return p_feet.hBox;
     }
 
 
@@ -206,8 +225,9 @@ public class CustomEntity {
         // Update physics body
         pBody.update();
 
-        // Update collisions body
+        // Update collision bodies
         hBox.updatePos(pBody.getDx(), pBody.getDy());
+        p_feet.updateHbox(this);
 
     }
 

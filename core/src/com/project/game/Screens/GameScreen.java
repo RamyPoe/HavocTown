@@ -10,8 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.PlayerConfig;
-import com.project.game.Weapons.GunBullet;
-import com.project.game.Weapons.GunLibrary;
+import com.project.game.Weapons.Weapon;
 import com.project.game.World.GameWorld;
 import com.project.game.World.Parallax;
 import com.project.game.World.WorldConfig;
@@ -44,8 +43,10 @@ public class GameScreen implements Screen {
         this.wConfig = wConfig;
         this.pConfig = pConfig;
 
+
         // For prespective
         cam = new OrthographicCamera();
+        cam.zoom = 1.0f;
         viewport = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, cam);
 
         // Load background texture
@@ -58,25 +59,29 @@ public class GameScreen implements Screen {
         // Create world
         gameWorld = new GameWorld(wConfig);
 
+        // So that weapons can create throwables
+        Weapon.setWorld(gameWorld);
+
         // Create player
         player = new CustomEntity(-25, MainGame.V_HEIGHT*2, pConfig);
         gameWorld.addPlayer(player);
 
-        player.giveWeapon(
-            GunLibrary.ak47(player)
-        );
-        
+
         // Player 2 for testing
+        PlayerConfig ccc = new PlayerConfig();
+        ccc.faceSkin = 1;
+        ccc.hatSkin = 4;
+        ccc.playerColorNumber = 1;
+        ccc.shirtSkin = 4;
+
         player2 = new CustomEntity(-125, MainGame.V_HEIGHT*2, pConfig);
         gameWorld.addPlayer(player2);
-
-        player2.giveWeapon(
-            GunLibrary.ks23(player2)
-        );
 
         // Starting camera position
         cam.position.x = (float) player.pBody.getDx();
         cam.position.y = (float) player.pBody.getDy();
+
+        
 
 
     }
@@ -145,9 +150,10 @@ public class GameScreen implements Screen {
         gameWorld.step(delta);
 
 
-        // TODO: Camera should show all players
-        cam.position.x += (player.getX() - cam.position.x) * CAM_SPEED_FACTOR/3 * delta;
-        cam.position.y += (player.getY() - cam.position.y) * CAM_SPEED_FACTOR * delta;
+        // Average of all players
+        cam.position.x += (MainGame.clamp(gameWorld.averagePlayerX(), -500, 500) - cam.position.x) * CAM_SPEED_FACTOR/3 * delta;
+        cam.position.y += (MainGame.clamp(gameWorld.averagePlayerY(), 100, 1000) - cam.position.y) * CAM_SPEED_FACTOR * delta;
+
 
     }
 
@@ -159,7 +165,7 @@ public class GameScreen implements Screen {
 
         // Camera
         cam.update();
-
+        
         // Reset screen
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -171,17 +177,8 @@ public class GameScreen implements Screen {
         // Draw background
         backgroundParallax.draw(game.batch, cam);
 
-        // Draw bullets
-        for (GunBullet b : gameWorld.getBulletArray()) {
-            b.draw(game.batch);
-        }
-
-        // Draw player
-        player.draw(game.batch);
-        player2.draw(game.batch);
-
-        // Debug
-        // gameWorld.draw(game.batch);
+        // Draw players, bullets, (platforms)
+        gameWorld.draw(game.batch);
 
         // Done drawing
         game.batch.end();

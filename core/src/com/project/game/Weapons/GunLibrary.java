@@ -14,7 +14,7 @@ public class GunLibrary {
     }
     
     public static Weapon ak47(CustomEntity p) {
-        Weapon w = new Rifle(1, 100, 3, 5, 105, 20, false, 20, 1000, 5, p);
+        Weapon w = new Rifle(1, 100, 3, 5, 105, 20, true, 30, 1000, 7, p);
         w.initHandle(49, 27, -30);
         w.initBackHandPos(110, 30);
         w.setRecoilRot(5);
@@ -23,7 +23,7 @@ public class GunLibrary {
     }
     
     public static Weapon ks23(CustomEntity p) {
-        Weapon w = new Shotgun(2, 600, 5, 10, 25, 20, false, 99, 1000, 10, 5, 45, 100, p);
+        Weapon w = new Shotgun(2, 600, 5, 10, 25, 20, true, 5, 300, 10, 5, 45, 100, p);
         w.initHandle(29, 18, -25);
         w.initBackHandPos(60, 16);
         w.setRecoilRot(25);

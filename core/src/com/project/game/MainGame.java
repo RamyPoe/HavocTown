@@ -14,55 +14,71 @@ import com.project.game.World.WorldConfig;
 
 public class MainGame extends Game {
 
-	private enum SCREENS {MainMenu, Tutorial};
-	private SCREENS cur_screen = SCREENS.MainMenu;
-	private SCREENS new_screen = SCREENS.MainMenu;
+	// For switching screens
+	private static enum SCREENS {MainMenu, Tutorial};
+	private static SCREENS cur_screen = SCREENS.MainMenu;
+	private static SCREENS new_screen = SCREENS.MainMenu;
 
+	// Player configurations
+	public PlayerConfig playerConfiguration;
+	
 	// Screen Constants
 	public static final int V_WIDTH = 1536;
 	public static final int V_HEIGHT = 864;
-
+	
+	public static final int GAME_MAX_RIGHT 	=  1000;
+	public static final int GAME_MAX_LEFT 	= -1000;
+	public static final int GAME_MAX_TOP 	=  1000;
+	public static final int GAME_MAX_BOTTOM = -400 ;
+	
 	// For transition elements
 	public Transition transition;
-
+	
 	// For drawing images
 	public SpriteBatch batch;
-
+	
 	
 	@Override
 	public void create () {
-
+		
 		// Batch used for drawing
 		batch = new SpriteBatch();
-
+		
 		// For animation between screens
 		transition = new Transition(60);
 		transition.setGame(this);
+		
+		// For player skin selection
+		playerConfiguration = new PlayerConfig();
 
 		// Start with MainMenuScreen
 		setScreen(
 			new MainMenuScreen(this)
-		);
+			);
+		}
+		
+		
+		// Our different options from the MainMenu
+		public void setScreenTutorial() {
+			new_screen = SCREENS.Tutorial;
 
-	}
-
-
-	// Our different options from the MainMenu
-	public void setScreenTutorial() {
-		new_screen = SCREENS.Tutorial;
-	}
-
-	// So we can draw things
-    public static Texture createTexture(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fillRectangle(0, 0, width, height);
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-        return texture;
-    }
-
-
+			playerConfiguration.hatSkin = -1;
+			playerConfiguration.shirtSkin = -1;
+			playerConfiguration.faceSkin = 5;
+			playerConfiguration.playerColorNumber = 0;
+		}
+		
+		// So we can draw things
+		public static Texture createTexture(int width, int height, Color color) {
+			Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+			pixmap.setColor(color);
+			pixmap.fillRectangle(0, 0, width, height);
+			Texture texture = new Texture(pixmap);
+			pixmap.dispose();
+			return texture;
+		}
+		
+		
 	@Override
 	public void render () {
 		
@@ -91,17 +107,16 @@ public class MainGame extends Game {
 					config.addPlatform(-615, 1200, 1200, 40, true);
 
 
-					WorldConfig.writeConfigFile(config);
+					// WorldConfig.writeConfigFile(config);
 					*/
 					
-					WorldConfig wConfig = WorldConfig.readConfigFile("b");
-					PlayerConfig pConfig = new PlayerConfig();
+					WorldConfig wConfig = WorldConfig.readConfigFile("a");
 
 					setScreen(
 						new GameScreen(
 							this,
 							wConfig,
-							pConfig
+							playerConfiguration
 						)
 					);
 				
@@ -129,6 +144,11 @@ public class MainGame extends Game {
 	// Get current time
 	public static long getTimeMs() {
 		return System.nanoTime() / 1_000_000;
+	}
+
+	// Keep value within bounds
+	public static float clamp(float val, float min, float max) {
+		return Math.max(min, Math.min(max, val));
 	}
 
 }

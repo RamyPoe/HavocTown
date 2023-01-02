@@ -52,25 +52,7 @@ public class Rifle extends Weapon {
             ));
         }
 
-        // Reload
-        if (!disposable && ammo <= 0) {
-
-            if (!reloading)
-                reloadTimer = (int) MainGame.getTimeMs();
-            reloading = true;
-            
-
-            if (reloading && MainGame.getTimeMs()-reloadTimer >= reloadTime) {
-                ammo = max_ammo;
-                reloading = false;
-            }
-
-        }
-
-        // Lose the weapon and go back to default
-        else if (disposable) {
-            // TODO: LOSE DISPOSABLE GUNS
-        }
+        
 
     }
 
