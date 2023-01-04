@@ -71,25 +71,28 @@ public class GameWorld {
         return av / players.size();
     }
 
+    // For spawning
     public float randomSpawnX() {
 
         // Get random x coordinate
         return (float) (Math.random()*800 - 400) - SupplyDrop.supplyTexture.getWidth();
     }
-
+    
+    // Create the supply drop
     public void addRandomSupplyDrop() {
-
-
-        // Create the supply drop
         supplydrops.add(
             new SupplyDrop( randomSpawnX(), MainGame.GAME_MAX_TOP)
         );
-
     }
 
-    // For the weapons
+    // Return bullet array for the weapons
     public ArrayList<GunBullet> getBulletArray() {
         return bullets;
+    }
+
+    // Get players for the hud
+    public ArrayList<CustomEntity> getPlayerArray() {
+        return players;
     }
 
     // Update the world
@@ -108,9 +111,9 @@ public class GameWorld {
                 p.getY() < MainGame.GAME_MAX_BOTTOM
                 ) {
 
-                    p.reset();
                     p.setPosX(randomSpawnX());
                     p.setPosY(MainGame.GAME_MAX_TOP);
+                    p.reset();
 
                 }
         }
@@ -255,9 +258,9 @@ public class GameWorld {
                 if (p.touching != null) { continue; }
 
                 // Determine if collision is from above or below
-                Hitbox temp = new Hitbox(p.getFeetHitbox().x+(p.pBody.getVx() > 0 ? -6 : 6), p.getFeetHitbox().y-10, p.getFeetHitbox().w, p.getFeetHitbox().h);
+                Hitbox temp = new Hitbox(p.getFeetHitbox().x+(p.pBody.getVx() > 0 ? -6 : 6), p.getFeetHitbox().y-20, p.getFeetHitbox().w, p.getFeetHitbox().h);
                 // From above, treat as solid
-                if ((temp.isColliding(plat.hBox) && !p.wants_to_pass_through) || !plat.passable) {
+                if ((temp.isColliding(plat.hBox) && !p.wants_to_pass_through) || (!plat.passable && temp.isColliding(plat.hBox))) {
 
                     // Reset jumps and velocity
                     p.grounded = true;

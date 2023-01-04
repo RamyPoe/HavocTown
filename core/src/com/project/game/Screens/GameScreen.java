@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.PlayerConfig;
+import com.project.game.Scenes.PlayerHud;
 import com.project.game.Weapons.Weapon;
 import com.project.game.World.GameWorld;
 import com.project.game.World.Parallax;
@@ -25,10 +26,13 @@ public class GameScreen implements Screen {
     private Viewport viewport;
     public static final float CAM_SPEED_FACTOR = 2.2f;
 
-    // Handle game logic
+    // Handle game logic and drawing
     GameWorld gameWorld;
     WorldConfig wConfig;
     
+    // Show the player Hud
+    PlayerHud playerHuds;
+
     // Background image
     Parallax backgroundParallax;
     
@@ -82,6 +86,8 @@ public class GameScreen implements Screen {
         cam.position.y = (float) player.pBody.getDy();
 
         
+        // Create the player hud
+        playerHuds = new PlayerHud(game.batch, gameWorld.getPlayerArray());
 
 
     }
@@ -152,7 +158,7 @@ public class GameScreen implements Screen {
 
         // Average of all players
         cam.position.x += (MainGame.clamp(gameWorld.averagePlayerX(), -500, 500) - cam.position.x) * CAM_SPEED_FACTOR/3 * delta;
-        cam.position.y += (MainGame.clamp(gameWorld.averagePlayerY(), 100, 1000) - cam.position.y) * CAM_SPEED_FACTOR * delta;
+        cam.position.y += (MainGame.clamp(gameWorld.averagePlayerY(), 100, 500) - cam.position.y) * CAM_SPEED_FACTOR * delta;
 
 
     }
@@ -182,6 +188,9 @@ public class GameScreen implements Screen {
 
         // Done drawing
         game.batch.end();
+
+        // Draw the hud
+        playerHuds.draw();
 
         // Transition screen
         if (!game.transition.haveFadedIn)

@@ -111,6 +111,11 @@ public abstract class Weapon {
         p.pBody.applyForceX((p.flip?-1:1) * recoil/4);
     }
 
+    // Get the remaining ammo
+    public int getAmmoCount() {
+        return ammo;
+    }
+
     // Setter
     public void initHandle(int originX, int originY, float idleRot) {
         this.wpnImage.setOrigin(originX, originY);

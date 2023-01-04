@@ -71,6 +71,7 @@ public class MainMenuHud implements Disposable {
         table.row();
         table.add(settingsButton).align(Align.right);
 
+
         // Add table to stage
         stage.addActor(table);
 
@@ -79,7 +80,7 @@ public class MainMenuHud implements Disposable {
 
     }
 
-    public void draw(float delta) {
+    public void draw() {
 
         // For animations
         stage.act();

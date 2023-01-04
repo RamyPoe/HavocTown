@@ -64,7 +64,7 @@ public class MainGame extends Game {
 
 			playerConfiguration.hatSkin = -1;
 			playerConfiguration.shirtSkin = -1;
-			playerConfiguration.faceSkin = 5;
+			playerConfiguration.faceSkin = 3;
 			playerConfiguration.playerColorNumber = 0;
 		}
 		

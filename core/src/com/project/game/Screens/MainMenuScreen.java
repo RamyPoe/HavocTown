@@ -141,7 +141,7 @@ public class MainMenuScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Draw all stage actors
-        hud.draw(delta);
+        hud.draw();
 
         // Draw transition
         game.transition.draw();

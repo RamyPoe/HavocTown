@@ -75,12 +75,9 @@ public class CustomEntity {
 
     }
     
-    // Try to shoot the gun
+    // Try to shoot the gun and apply recoil
     public void shoot(ArrayList<GunBullet> bullets) {
-
-        // Shoot the bullets and apply recoil
         weapon.shoot(bullets, this);
-
     }
 
     // When assigning a weapon
@@ -111,6 +108,20 @@ public class CustomEntity {
         this.pBody.setVx(0);
         this.pBody.setVy(0);
 
+        // Reset body part position to avoid lerp
+        this.p_hands.setFrontHandPos(getX(), getY());
+        this.p_hands.setBackHandPos(getX(), getY());
+
+    }
+
+    // Get the player config
+    public PlayerConfig getPlayerConfig() {
+        return p_head.pConfig;
+    }
+
+    // Get the ammo for the current weapon
+    public int getAmmoCount() {
+        return weapon.getAmmoCount();
     }
 
     // Drawing with animations
@@ -190,7 +201,7 @@ public class CustomEntity {
         if (jumps <= 0) { return; }
 
         this.pBody.setVy(0);
-        this.pBody.applyForceY(13);
+        this.pBody.applyForceY(15);
         this.jumps--;
 
     }
@@ -216,7 +227,7 @@ public class CustomEntity {
 
     // Apply gravity
     public void applyGravity() {
-        pBody.applyForceY(-0.3);
+        pBody.applyForceY(-0.5);
     }
 
     // Set positions (called once per frame)

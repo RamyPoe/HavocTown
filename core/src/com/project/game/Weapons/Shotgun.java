@@ -36,6 +36,9 @@ public class Shotgun extends Weapon {
     @Override
     public void shoot(ArrayList<GunBullet> bullets, CustomEntity p) {
 
+        // Super
+        // super.shoot(bullets, p);
+
         // Get current time
         long millis = System.nanoTime() / 1_000_000;
 
@@ -62,21 +65,6 @@ public class Shotgun extends Weapon {
                     flip
                 ));
 
-            }
-
-        }
-
-        // Reload
-        if (!disposable && ammo <= 0) {
-
-            if (!reloading)
-                reloadTimer = (int) MainGame.getTimeMs();
-            reloading = true;
-            
-
-            if (reloading && MainGame.getTimeMs()-reloadTimer >= reloadTime) {
-                ammo = max_ammo;
-                reloading = false;
             }
 
         }
