@@ -3,40 +3,42 @@ package com.project.game.World;
 import java.util.*;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Disposable;
 import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.Hitbox;
 import com.project.game.Weapons.GunBullet;
-import com.project.game.Weapons.GunLibrary;
 import com.project.game.Weapons.Throwable;
+import com.badlogic.gdx.utils.Array;
 
-public class GameWorld {
+public class GameWorld implements Disposable {
     
     // World structure
-    private ArrayList<Platform> platforms;
+    private Array<Platform> platforms;
+    private Hitbox temp = new Hitbox(0, 0, CustomEntity.P_WIDTH, 30);
 
     // Players
-    private ArrayList<CustomEntity> players;
+    private Array<CustomEntity> players;
 
     // Bullets
-    private ArrayList<GunBullet> bullets;
+    private Array<GunBullet> bullets;
 
     // Pistol when reloading
-    private ArrayList<Throwable> throwables;
+    private Array<Throwable> throwables;
 
     // Supply drops
-    private ArrayList<SupplyDrop> supplydrops;
+    private Array<SupplyDrop> supplydrops;
 
 
     // Constructor
     public GameWorld(WorldConfig config) {
 
         // Create arrays
-        platforms = new ArrayList<>();
-        players = new ArrayList<>();
-        bullets = new ArrayList<>();
-        throwables = new ArrayList<>();
-        supplydrops = new ArrayList<>();
+        platforms = new Array<>(false, 10, Platform.class);
+        players = new Array<>(false, 4, CustomEntity.class);
+        bullets = new Array<>(false, 16, GunBullet.class);
+        throwables = new Array<>(false, 4, Throwable.class);
+        supplydrops = new Array<>(false, 4, SupplyDrop.class);
 
         // Add the platforms
         for (Box b : config.getPlatformArray()) {
@@ -63,19 +65,19 @@ public class GameWorld {
     public float averagePlayerX() {
         float av = 0;
         for (CustomEntity p : players) { av += p.getX(); }
-        return av / players.size();
+        return av / players.size;
     }
     public float averagePlayerY() {
         float av = 0;
         for (CustomEntity p : players) { av += p.getY(); }
-        return av / players.size();
+        return av / players.size;
     }
 
     // For spawning
     public float randomSpawnX() {
 
         // Get random x coordinate
-        return (float) (Math.random()*800 - 400) - SupplyDrop.supplyTexture.getWidth();
+        return (float) (Math.random()*800 - 400) - SupplyDrop.TEXTURE_WIDTH;
     }
     
     // Create the supply drop
@@ -86,12 +88,12 @@ public class GameWorld {
     }
 
     // Return bullet array for the weapons
-    public ArrayList<GunBullet> getBulletArray() {
+    public Array<GunBullet> getBulletArray() {
         return bullets;
     }
 
     // Get players for the hud
-    public ArrayList<CustomEntity> getPlayerArray() {
+    public Array<CustomEntity> getPlayerArray() {
         return players;
     }
 
@@ -99,7 +101,12 @@ public class GameWorld {
     public void step(float delta) {
 
         // Apply gravity and check players with map
-        for (CustomEntity p : players) {
+        for (int i = 0; i < players.size; i++) {
+
+            // Get element
+            CustomEntity p = players.get(i);
+
+            // Apply forces
             p.applyGravity();
             p.applyFrictionX();
             p.update();
@@ -120,10 +127,14 @@ public class GameWorld {
 
 
         // Check bullets with players
-        for (CustomEntity p : players) {
+        for (int i = 0; i < players.size; i++) {
+
+            // Get element
+            CustomEntity p = players.get(i);
 
             // For every bullet
-            ListIterator<GunBullet> bs = bullets.listIterator();
+            Iterator<GunBullet> bs = bullets.iterator();
+
             while (bs.hasNext()) {
                 GunBullet b = bs.next();
 
@@ -137,12 +148,13 @@ public class GameWorld {
                     bs.remove();
                 }
             }
+            bs = null;
 
         }
 
         
         // Move the bullets
-        ListIterator<GunBullet> bs = bullets.listIterator();
+        Iterator<GunBullet> bs = bullets.iterator();
         while (bs.hasNext()) {
             GunBullet b = bs.next();
 
@@ -153,9 +165,15 @@ public class GameWorld {
 
 
         // Check throwables with players
-        for (CustomEntity p : players) {
+        for (int i = 0; i < players.size; i++) {
 
-            for (Throwable t : throwables) {
+            // Get element
+            CustomEntity p = players.get(i);
+
+            for (int j = 0; j < throwables.size; j++) {
+
+                // Get element
+                Throwable t = throwables.get(j);
 
                 // Already collided
                 if (t.collided) { continue; }
@@ -176,7 +194,7 @@ public class GameWorld {
         }
 
         // Move the throwables
-        ListIterator<Throwable> ts = throwables.listIterator();
+        Iterator<Throwable> ts = throwables.iterator();
         while(ts.hasNext()) {
             Throwable t = ts.next();
 
@@ -186,7 +204,7 @@ public class GameWorld {
         }
 
         // Check for supply drop collisions with platforms/players
-        Iterator<SupplyDrop> sdIt = supplydrops.listIterator();
+        Iterator<SupplyDrop> sdIt = supplydrops.iterator();
         while (sdIt.hasNext()) {
 
             // Get supply drop
@@ -196,7 +214,10 @@ public class GameWorld {
             sd.update();
 
             // With platforms
-            for (Platform pl : platforms) {
+            for (int i = 0; i < platforms.size; i++) {
+
+                // Get element
+                Platform pl = platforms.get(i);
 
                 if (pl.hBox.isColliding(sd.hBox)) {
 
@@ -209,7 +230,10 @@ public class GameWorld {
 
 
             // With players
-            for (CustomEntity p : players) {
+            for (int i = 0; i < players.size; i++) {
+
+                // Get element
+                CustomEntity p = players.get(i);
 
                 // Give a random gun when player gets supply drop
                 if (p.hBox.isColliding(sd.hBox)) {
@@ -244,7 +268,10 @@ public class GameWorld {
         p.grounded = false;
 
         // Check for every platform
-        for (Platform plat : platforms) {
+        for (int i = 0; i < platforms.size; i++) {
+
+            // Get element
+            Platform plat = platforms.get(i);
 
             // Is the right one
             if (p.touching != null)
@@ -258,7 +285,9 @@ public class GameWorld {
                 if (p.touching != null) { continue; }
 
                 // Determine if collision is from above or below
-                Hitbox temp = new Hitbox(p.getFeetHitbox().x+(p.pBody.getVx() > 0 ? -6 : 6), p.getFeetHitbox().y-20, p.getFeetHitbox().w, p.getFeetHitbox().h);
+                // temp = new Hitbox(p.getFeetHitbox().x+(p.pBody.getVx() > 0 ? -6 : 6), p.getFeetHitbox().y-20, p.getFeetHitbox().w, p.getFeetHitbox().h);
+                temp.updatePos(p.getFeetHitbox().x+(p.pBody.getVx() > 0 ? -6 : 6), p.getFeetHitbox().y-20);
+
                 // From above, treat as solid
                 if ((temp.isColliding(plat.hBox) && !p.wants_to_pass_through) || (!plat.passable && temp.isColliding(plat.hBox))) {
 
@@ -288,23 +317,23 @@ public class GameWorld {
     public void draw(Batch b) {
         
         // Draw supply drops
-        for (SupplyDrop sd : supplydrops) {
-            sd.draw(b);
+        for (int i = 0; i < supplydrops.size; i++) {
+            supplydrops.get(i).draw(b);
         }
 
         // Draw bullets
-        for (GunBullet bu : getBulletArray()) {
-            bu.draw(b);
+        for (int i = 0; i < bullets.size; i++) {
+            bullets.get(i).draw(b);
         }
         
         // Draw player
-        for (CustomEntity p : players) {
-            p.draw(b);
+        for (int i = 0; i < players.size; i++) {
+            players.get(i).draw(b);
         }
 
         // Draw throwables
-        for (Throwable t : throwables) {
-            t.draw(b);
+        for (int i = 0; i < throwables.size; i++) {
+            throwables.get(i).draw(b);
         }
 
         
@@ -316,6 +345,22 @@ public class GameWorld {
         }
         */
 
+    }
+
+    @Override
+    public void dispose() {
+
+
+        for (CustomEntity p : players) {
+            p.dispose();
+        }
+
+        SupplyDrop.dispose();
+
+        for (Platform p : platforms) {
+            p.dispose();
+        }
+        
     }
 
 }

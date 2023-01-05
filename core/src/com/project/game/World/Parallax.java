@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Parallax {
+public class Parallax implements Disposable {
 
     // Hold each layer
     Texture layer1;
@@ -46,6 +47,15 @@ public class Parallax {
         batch.draw(layer1, -layer1.getWidth()/2 + xDif,       yDif/3 + yOff1);
         batch.draw(layer2, -layer2.getWidth()/2 + xDif*0.6f,  yDif/6 + yOff2);
         batch.draw(layer3, -layer3.getWidth()/2,              yOff3);
+    }
+
+    @Override
+    public void dispose() {
+        
+        layer1.dispose();
+        layer2.dispose();
+        layer3.dispose();
+        
     }
 
 

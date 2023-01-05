@@ -3,8 +3,9 @@ package com.project.game.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Body {
+public class Body implements Disposable {
 
     // Config
     PlayerConfig pConfig;
@@ -38,6 +39,16 @@ public class Body {
         if (shirtTexture != null)
             sb.draw(shirtTexture, p.flip ? x : x+shirtTexture.getWidth(), y, shirtTexture.getWidth() * (p.flip ? 1 : -1), shirtTexture.getHeight());
 
+    }
+
+    @Override
+    public void dispose() {
+
+        if (bodyTexture != null)
+            bodyTexture.dispose();
+        if (shirtTexture != null)
+            shirtTexture.dispose();
+        
     }
 
 }

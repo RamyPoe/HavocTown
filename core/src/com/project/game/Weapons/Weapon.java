@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.Feet;
@@ -48,8 +49,8 @@ public abstract class Weapon {
     public boolean flip;
 
     // Drawing
-    protected static Texture[] nozzleFlash;
-    protected static Texture[] weaponTextures;
+    protected static Texture[] nozzleFlash = null;
+    protected static Texture[] weaponTextures = null;
     protected Image wpnImage;
     protected int originX, originY;
 
@@ -63,22 +64,27 @@ public abstract class Weapon {
     protected int weaponStartY;
     protected int weaponEndY;
 
-    // Load textures
-    static {
-        nozzleFlash = new Texture[2];
-        nozzleFlash[0] = new Texture(Gdx.files.internal("weapons/nozzle/0.png"));
-        nozzleFlash[1] = new Texture(Gdx.files.internal("weapons/nozzle/1.png"));
-        
-        weaponTextures = new Texture[3];
-        weaponTextures[0] = new Texture(Gdx.files.internal("weapons/guns/0.png"));
-        weaponTextures[1] = new Texture(Gdx.files.internal("weapons/guns/1.png"));
-        weaponTextures[2] = new Texture(Gdx.files.internal("weapons/guns/2.png"));
-    }
+    
 
     // Constructor
     public Weapon(int weaponNumber, int shootTime, int weight, int recoil, int gun_length, int bulletSpeed,
                   boolean disposable, int max_ammo, int reloadTime, float strength, CustomEntity p) {
-                    
+           
+        // Load textures
+        if (nozzleFlash == null) {
+            nozzleFlash = new Texture[2];
+            nozzleFlash[0] = new Texture(Gdx.files.internal("weapons/nozzle/0.png"));
+            nozzleFlash[1] = new Texture(Gdx.files.internal("weapons/nozzle/1.png"));
+        }
+    
+        if (weaponTextures == null) {
+            weaponTextures = new Texture[3];
+            weaponTextures[0] = new Texture(Gdx.files.internal("weapons/guns/0.png"));
+            weaponTextures[1] = new Texture(Gdx.files.internal("weapons/guns/1.png"));
+            weaponTextures[2] = new Texture(Gdx.files.internal("weapons/guns/2.png"));
+        }            
+        
+        // Save fields
         this.wpnImage = new Image(weaponTextures[weaponNumber]);
         this.shootTime = shootTime;
         this.weight = weight;
@@ -98,10 +104,12 @@ public abstract class Weapon {
         this.y2 = this.y1 = 0;
         r2 = r1 = 0;
 
+        
+
     }
 
     // Spawn bullet(s)
-    public void shoot(ArrayList<GunBullet> bullets, CustomEntity p) {
+    public void shoot(Array<GunBullet> bullets, CustomEntity p) {
         if (MainGame.getTimeMs()-time_last_shot >= shootTime && ammo > 0 && !reloading)
             lightNozzle = true;
     }
@@ -309,6 +317,28 @@ public abstract class Weapon {
         if (t <= 0.5)
             return 1f - (float) Math.pow(t/0.5, 3);
         return 0f;
+
+    }
+
+    public static void dispose() {
+
+        if (nozzleFlash != null) {
+
+            for (int i = 0; i < nozzleFlash.length; i++) {
+                nozzleFlash[i].dispose();
+            }
+            nozzleFlash = null;
+
+        }
+
+        if (weaponTextures != null) {
+
+            for (int i = 0; i < weaponTextures.length; i++) {
+                weaponTextures[i].dispose();
+            }
+            weaponTextures = null;
+            
+        }
 
     }
 

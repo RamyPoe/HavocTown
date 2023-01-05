@@ -3,13 +3,15 @@ package com.project.game.Player;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.project.game.MainGame;
 import com.project.game.Weapons.GunBullet;
 import com.project.game.Weapons.GunLibrary;
 import com.project.game.Weapons.Weapon;
 import com.project.game.World.Platform;
 
-public class CustomEntity {
+public class CustomEntity implements Disposable {
     
     // Player constants
     public static float P_WIDTH = 65;
@@ -76,7 +78,7 @@ public class CustomEntity {
     }
     
     // Try to shoot the gun and apply recoil
-    public void shoot(ArrayList<GunBullet> bullets) {
+    public void shoot(Array<GunBullet> bullets) {
         weapon.shoot(bullets, this);
     }
 
@@ -245,6 +247,18 @@ public class CustomEntity {
     // Getters for drawing
     public float getX() { return (float) pBody.getDx(); }
     public float getY() { return (float) pBody.getDy(); }
+
+    @Override
+    public void dispose() {
+
+        p_body.dispose();
+        p_feet.dispose();
+        p_hands.dispose();
+        p_head.dispose();
+
+        Weapon.dispose();
+
+    }
     
 
 }

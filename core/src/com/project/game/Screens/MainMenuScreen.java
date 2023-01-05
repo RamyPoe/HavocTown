@@ -87,48 +87,25 @@ public class MainMenuScreen implements Screen {
             return;
         }
 
-        if (buttonPressed != BUTTONS.BTN_TUTORIAL) {
-            return;
-        }
-
-        // Fade out if button pressed
-        game.transition.fadeOut();
-        game.transition.haveFadedIn = false;
-
-    }
-
-    // Changing screens based on button press
-    private void checkChangeScreen() {
-        
-        // Haven't finished fading out
-        if (!game.transition.haveFadedOut) {
-            return;
-        }
-
-        // Don't repeat next frame
-        game.transition.haveFadedOut = false;
-
-        // Change to appropriate screen
-        switch (buttonPressed) {
-
-            case BTN_CAMPAIGN:
-                break;
-
-            case BTN_CUSTOM_GAME:
-                break;
+        // Check all buttons
+        switch(buttonPressed) {
 
             case BTN_TUTORIAL:
-                game.setScreenTutorial();                
+                game.transition.fadeOut(MainGame.SCREENS.Tutorial);
                 break;
-                
-            case BTN_SETTINGS:
+            case BTN_CUSTOM_GAME:
+                // game.transition.fadeOut(MainGame.SCREENS.Tutorial);
                 break;
 
             default:
                 break;
-            
+
         }
+
+
     }
+
+  
 
     @Override
     public void render(float delta) {
@@ -143,11 +120,13 @@ public class MainMenuScreen implements Screen {
         // Draw all stage actors
         hud.draw();
 
+        // Transition screen fade in
+        if (!game.transition.haveFadedIn && !game.transition.active)
+            game.transition.fadeIn();
+        
         // Draw transition
         game.transition.draw();
 
-        // Change screens
-        checkChangeScreen();
 
         
     }
@@ -174,7 +153,6 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        dispose();
         hud.dispose();
     }
 

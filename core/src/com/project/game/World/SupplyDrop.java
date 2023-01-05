@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Disposable;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.Hitbox;
 import com.project.game.Weapons.GunLibrary;
@@ -12,6 +13,9 @@ import com.project.game.Weapons.Weapon;
 
 public class SupplyDrop {
     
+    // For calculating center
+    public static final int TEXTURE_WIDTH = 70;
+
     // Spawn probability (higher is less likely)
     public static int SPAWN_CHANCE = 400;
 
@@ -25,12 +29,13 @@ public class SupplyDrop {
     // Drawing
     public static Texture supplyTexture;
     private Image supplyImg;
-    static {
-        supplyTexture = new Texture(Gdx.files.internal("other/supply.png"));
-    }
     
     // Constructor
     public SupplyDrop(float x, float y) {
+
+        // Load texture if haven't
+        if (supplyTexture == null)
+            supplyTexture = new Texture(Gdx.files.internal("other/supply.png"));
 
         // Create image
         supplyImg = new Image(supplyTexture);
@@ -96,5 +101,15 @@ public class SupplyDrop {
         return null;
 
     }
+
+
+    public static void dispose() {
+        if (supplyTexture != null) {
+            supplyTexture.dispose();
+            supplyTexture = null;    
+        }
+    }
+
+    
 
 }

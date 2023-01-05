@@ -2,6 +2,7 @@ package com.project.game.Weapons;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.utils.Array;
 import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 
@@ -22,7 +23,7 @@ public class Rifle extends Weapon {
     }
 
     @Override
-    public void shoot(ArrayList<GunBullet> bullets, CustomEntity p) {
+    public void shoot(Array<GunBullet> bullets, CustomEntity p) {
 
         // Super
         super.shoot(bullets, p);

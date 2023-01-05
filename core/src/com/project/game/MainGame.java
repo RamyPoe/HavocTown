@@ -15,7 +15,7 @@ import com.project.game.World.WorldConfig;
 public class MainGame extends Game {
 
 	// For switching screens
-	private static enum SCREENS {MainMenu, Tutorial};
+	public static enum SCREENS {MainMenu, Tutorial};
 	private static SCREENS cur_screen = SCREENS.MainMenu;
 	private static SCREENS new_screen = SCREENS.MainMenu;
 
@@ -26,8 +26,8 @@ public class MainGame extends Game {
 	public static final int V_WIDTH = 1536;
 	public static final int V_HEIGHT = 864;
 	
-	public static final int GAME_MAX_RIGHT 	=  1000;
-	public static final int GAME_MAX_LEFT 	= -1000;
+	public static final int GAME_MAX_RIGHT 	=  1400;
+	public static final int GAME_MAX_LEFT 	= -1400;
 	public static final int GAME_MAX_TOP 	=  1000;
 	public static final int GAME_MAX_BOTTOM = -400 ;
 	
@@ -54,29 +54,25 @@ public class MainGame extends Game {
 		// Start with MainMenuScreen
 		setScreen(
 			new MainMenuScreen(this)
-			);
-		}
-		
-		
-		// Our different options from the MainMenu
-		public void setScreenTutorial() {
-			new_screen = SCREENS.Tutorial;
+		);
 
-			playerConfiguration.hatSkin = -1;
-			playerConfiguration.shirtSkin = -1;
-			playerConfiguration.faceSkin = 3;
-			playerConfiguration.playerColorNumber = 0;
-		}
+	}
 		
-		// So we can draw things
-		public static Texture createTexture(int width, int height, Color color) {
-			Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-			pixmap.setColor(color);
-			pixmap.fillRectangle(0, 0, width, height);
-			Texture texture = new Texture(pixmap);
-			pixmap.dispose();
-			return texture;
-		}
+		
+	public void setGameScreen(SCREENS s) {
+		MainGame.new_screen = s;
+	}
+
+	
+	// So we can draw things
+	public static Texture createTexture(int width, int height, Color color) {
+		Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+		pixmap.setColor(color);
+		pixmap.fillRectangle(0, 0, width, height);
+		Texture texture = new Texture(pixmap);
+		pixmap.dispose();
+		return texture;
+	}
 		
 		
 	@Override
@@ -88,6 +84,8 @@ public class MainGame extends Game {
 		// See if screen need to be changed
 		if (cur_screen != new_screen) {
 
+			// Dispose old screen
+			this.getScreen().dispose();
 			
 			// Change the screen
 			switch (new_screen) {
@@ -110,6 +108,11 @@ public class MainGame extends Game {
 					// WorldConfig.writeConfigFile(config);
 					*/
 					
+					playerConfiguration.hatSkin = -1;
+					playerConfiguration.shirtSkin = -1;
+					playerConfiguration.faceSkin = 3;
+					playerConfiguration.playerColorNumber = 0;
+
 					WorldConfig wConfig = WorldConfig.readConfigFile("a");
 
 					setScreen(
@@ -123,6 +126,11 @@ public class MainGame extends Game {
 					break;
 				
 				case MainMenu:
+
+					setScreen(
+						new MainMenuScreen(this)
+					);
+
 					break;
 			}
 	

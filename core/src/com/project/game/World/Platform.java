@@ -5,10 +5,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.Disposable;
 import com.project.game.MainGame;
 import com.project.game.Player.Hitbox;
 
-public class Platform extends Sprite {
+public class Platform extends Sprite implements Disposable {
     
     
     // From bottom-left
@@ -38,6 +39,11 @@ public class Platform extends Sprite {
         hBox = new Hitbox(x, y, w, h);
 
 
+    }
+
+    @Override
+    public void dispose() {
+        this.getTexture().dispose();
     }
 
 }

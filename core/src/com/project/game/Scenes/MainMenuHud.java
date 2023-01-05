@@ -41,9 +41,6 @@ public class MainMenuHud implements Disposable {
         // Background image
         backgroundTexture = new Texture(Gdx.files.internal("maps/1.jpg"));
 
-        // Setup for buttons
-        MenuButton.loadButtonFont("fonts/menu-font");
-
         // Buttons
         campaignGameButton = new MenuButton("CAMPAIGN", "story mode");
         customGameButton = new MenuButton("CUSTOM GAME", "custom game");
@@ -101,7 +98,7 @@ public class MainMenuHud implements Disposable {
     @Override
     public void dispose() {
         stage.dispose();
-        MenuButton.dispose();
+        backgroundTexture.dispose();
     }
 
 }

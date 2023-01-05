@@ -3,8 +3,9 @@ package com.project.game.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Head {
+public class Head implements Disposable {
     
     // Animation Settings (ms)
     private static float ANIMATION_BOB_LENGTH = 2000f;
@@ -118,6 +119,18 @@ public class Head {
         // y = -4(x)(x-1)
         return -4 * (x) * (x-1);
 
+    }
+
+    @Override
+    public void dispose() {
+        
+        if (headTexture != null)
+            headTexture.dispose();
+        if (faceTexture != null)
+            faceTexture.dispose();
+        if (hatTexture != null)
+            hatTexture.dispose();
+        
     }
 
 }

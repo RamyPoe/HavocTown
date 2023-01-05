@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
+import com.project.game.MainGame.SCREENS;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.PlayerConfig;
 import com.project.game.Scenes.PlayerHud;
@@ -151,13 +152,19 @@ public class GameScreen implements Screen {
 
         //============================================
 
+        // Go back to Main menu
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && !game.transition.active) {
+
+            game.transition.fadeOut(MainGame.SCREENS.MainMenu);
+
+        }
 
         // Check for world collisions
         gameWorld.step(delta);
 
 
         // Average of all players
-        cam.position.x += (MainGame.clamp(gameWorld.averagePlayerX(), -500, 500) - cam.position.x) * CAM_SPEED_FACTOR/3 * delta;
+        cam.position.x += (MainGame.clamp(gameWorld.averagePlayerX(), -400, 400) - cam.position.x) * CAM_SPEED_FACTOR/3 * delta;
         cam.position.y += (MainGame.clamp(gameWorld.averagePlayerY(), 100, 500) - cam.position.y) * CAM_SPEED_FACTOR * delta;
 
 
@@ -192,10 +199,13 @@ public class GameScreen implements Screen {
         // Draw the hud
         playerHuds.draw();
 
-        // Transition screen
-        if (!game.transition.haveFadedIn)
+        // Transition screen fade in
+        if (!game.transition.haveFadedIn && !game.transition.active)
             game.transition.fadeIn();
+        
+        // Draw transition
         game.transition.draw();
+        
         
     }
 
@@ -224,7 +234,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
+
+        backgroundParallax.dispose();
+
+        playerHuds.dispose();
+        gameWorld.dispose();
         
     }
     

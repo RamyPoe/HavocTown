@@ -18,40 +18,8 @@ public class MenuButton extends TextButton {
     private static BitmapFont buttonFont, descriptionFont;
     private static TextButtonStyle txtBtnStyle; 
 
-    public MenuButton(String text, String description) {
-
-        // Super
-        super(text, txtBtnStyle);
-
-        // Text specific to this button
-        this.text = text;
-        this.description = description;
-
-        // For mouse cursor changing
-        addEventListener();
-
-    }
-
-    public void addEventListener() {
-
-        addListener(new ClickListener() {
-
-            @Override
-            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                Gdx.graphics.setSystemCursor(SystemCursor.Hand);
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-                Gdx.graphics.setSystemCursor(SystemCursor.Arrow);
-            }
-
-        });
-
-    }
-
-
-    public static void loadButtonFont(String path) {
+    // Load assets
+    static {
         // File handle
         FileHandle fontFileHandle = Gdx.files.internal("fonts/menu-font.ttf");
 
@@ -87,10 +55,38 @@ public class MenuButton extends TextButton {
         txtBtnStyle.font = buttonFont;
     }
 
-    public static void dispose() {
-        buttonFont.dispose();
-        descriptionFont.dispose();
+
+    public MenuButton(String text, String description) {
+
+        // Super
+        super(text, txtBtnStyle);
+
+        // Text specific to this button
+        this.text = text;
+        this.description = description;
+
+        // For mouse cursor changing
+        addEventListener();
 
     }
+
+    public void addEventListener() {
+
+        addListener(new ClickListener() {
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                Gdx.graphics.setSystemCursor(SystemCursor.Hand);
+            }
+
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                Gdx.graphics.setSystemCursor(SystemCursor.Arrow);
+            }
+
+        });
+
+    }
+
 
 }

@@ -5,8 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Hands {
+public class Hands implements Disposable {
     
     // Config
     PlayerConfig pConfig;
@@ -75,6 +76,14 @@ public class Hands {
         handImage.setPosition(bx1 - handImage.getWidth()/2, by1 - handImage.getHeight()/2);
         handImage.draw(sb, 1);
 
+    }
+
+    @Override
+    public void dispose() {
+        
+        if (handTexture != null)
+            handTexture.dispose();
+        
     }
 
 

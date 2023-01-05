@@ -19,19 +19,18 @@ public class Transition {
 
     // Position in percent
     public boolean active = false;
-    boolean fadeIn = true;
+    public boolean fadeIn = true;
     float pos;
 
     // For the frame of entering/leaving
     public boolean haveFadedIn = false;
     public boolean haveFadedOut = false;
 
-
     // Speed of transition
     float speed;
 
     // For drawing
-    Screen screen;
+    MainGame.SCREENS screen;
 
     public Transition(float speed) {
 
@@ -61,11 +60,11 @@ public class Transition {
     }
 
     // To fade out
-    public void fadeOut() {
+    public void fadeOut(MainGame.SCREENS s) {
         haveFadedIn = false;
-        haveFadedOut = false;
+        // haveFadedOut = false;
         
-        // this.screen = s;
+        this.screen = s;
         fadeIn = false;
         pos = 0;
         active = true;
@@ -74,7 +73,7 @@ public class Transition {
     // To fade in
     public void fadeIn() {
         haveFadedIn = true;
-        haveFadedOut = true;
+        // haveFadedOut = true;
 
         this.screen = null;
         fadeIn = true;
@@ -107,8 +106,13 @@ public class Transition {
         // We drew the last frame, change screens
         if (pos == 1) {
             active = false;
-            if (!fadeIn)
-                haveFadedOut = true;
+
+            if (!fadeIn) {
+                game.setGameScreen(screen);
+            }
+
+            // if (!fadeIn)
+                // haveFadedOut = true;
         }
 
     }

@@ -1,6 +1,5 @@
 package com.project.game.Scenes;
 
-import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -11,12 +10,14 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -30,8 +31,11 @@ public class PlayerHud implements Disposable {
     public Viewport viewport;
     private OrthographicCamera cam;
 
+    // Array of huds for disposing
+    private Array<SingleHud> hudArray;
+
     // Constructor
-    public PlayerHud(SpriteBatch sb, ArrayList<CustomEntity> players) {
+    public PlayerHud(SpriteBatch sb, Array<CustomEntity> players) {
 
         // For prespective
         cam = new OrthographicCamera();
@@ -47,28 +51,11 @@ public class PlayerHud implements Disposable {
         table.padBottom(20);
 
         
-        // File handle
-        FileHandle fontFileHandle = Gdx.files.internal("fonts/hud-font.ttf");
-        
-        // Load Fonts
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFileHandle);
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-        
-        // Set parameters
-        parameter.size = 96;
-        parameter.color = Color.WHITE;
-        parameter.borderWidth = 2f;
-        parameter.borderColor = Color.BLACK;
-        
-        // Save font into style
-        Label.LabelStyle lblStyle = new Label.LabelStyle();
-        lblStyle.fontColor = Color.WHITE;
-        lblStyle.font = generator.generateFont(parameter); 
-
-        
         // Add huds to table
-        for (int i = 0; i < players.size(); i++) {
+        hudArray = new Array<>(false, 4, SingleHud.class);
+        for (int i = 0; i < players.size; i++) {
             SingleHud sh = new SingleHud(players.get(i));
+            hudArray.add(sh);
             table.add(sh).padLeft(i == 0 ? 0 : 45);
         }
 
@@ -97,15 +84,19 @@ public class PlayerHud implements Disposable {
     @Override
     public void dispose() {
         stage.dispose();
-        MenuButton.dispose();
+        for (SingleHud sh : hudArray) {
+            sh.dispose();
+        }
+        hudArray.clear();
     }
 
 }
 
-class SingleHud extends Group {
+class SingleHud extends Group implements Disposable {
 
     // Textures
     private static Texture backTexture, forgTexture;
+    private Texture palTexture;
 
     // Load static textures
     static {
@@ -186,8 +177,8 @@ class SingleHud extends Group {
         backImg = new Image(backTexture);
         forgImg = new Image(forgTexture);
 
-        paletteImg = new Image( new Texture(Gdx.files.internal("hud/palette/" + player.getPlayerConfig().playerColorNumber + ".png")) );
-
+        palTexture =  new Texture( Gdx.files.internal("hud/palette/" + player.getPlayerConfig().playerColorNumber + ".png") );
+        paletteImg = new Image(palTexture);
         
         // Create Labels
         nameLbl = new Label("Player 1", nameStyle);
@@ -215,6 +206,7 @@ class SingleHud extends Group {
         // Set size
         this.setSize(backImg.getWidth(), backImg.getHeight());
 
+
     }
 
     @Override
@@ -225,6 +217,11 @@ class SingleHud extends Group {
 
         // Maintain same drawing
         super.draw(batch, parentAlpha);
+    }
+
+    @Override
+    public void dispose() {
+        palTexture.dispose(); 
     }
 
 }

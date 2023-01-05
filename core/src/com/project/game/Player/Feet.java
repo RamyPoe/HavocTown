@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Feet {
+public class Feet implements Disposable {
     
     // Animation speed (ms)
     private static float ANIMATION_LENGTH = 400;
@@ -162,5 +163,13 @@ public class Feet {
     // Get the offsets
     public float getFrontX() { return fx1; }
     public float getBackX()  { return bx1; }
+
+    @Override
+    public void dispose() {
+
+        if (footTexture != null)
+            footTexture.dispose();            
+
+    }
 
 }
