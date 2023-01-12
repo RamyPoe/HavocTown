@@ -81,7 +81,7 @@ public class GameWorld implements Disposable {
     }
     
     // Create the supply drop
-    public void addRandomSupplyDrop() {
+    private void addRandomSupplyDrop() {
         supplydrops.add(
             new SupplyDrop( randomSpawnX(), MainGame.GAME_MAX_TOP)
         );

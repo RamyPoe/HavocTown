@@ -17,17 +17,17 @@ public class SupplyDrop {
     public static final int TEXTURE_WIDTH = 70;
 
     // Spawn probability (higher is less likely)
-    public static int SPAWN_CHANCE = 400;
+    public static final int SPAWN_CHANCE = 400;
 
     // For choosing the reward
-    public static int NUM_REWARDS = 2;
+    public static final int NUM_REWARDS = 2;
 
     // Movement
     Vector2 pos, vel;
     Hitbox hBox;
 
     // Drawing
-    public static Texture supplyTexture;
+    private static Texture supplyTexture;
     private Image supplyImg;
     
     // Constructor

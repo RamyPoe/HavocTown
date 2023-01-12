@@ -21,6 +21,7 @@ public class GunBullet {
     private float trailScale;
     private float angle;
 
+
     // Drawing
     private static Texture bulletTexture;
     private Image bulletImage;
