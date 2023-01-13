@@ -31,6 +31,7 @@ public class MainGame extends Game {
 	public static final int GAME_MAX_TOP 	=  1000;
 	public static final int GAME_MAX_BOTTOM = -400 ;
 	
+
 	// For transition elements
 	public Transition transition;
 	
