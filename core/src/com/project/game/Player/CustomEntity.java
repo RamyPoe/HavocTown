@@ -161,6 +161,19 @@ public class CustomEntity implements Disposable {
 
     }
 
+    // Update position when in model mode
+    public void updatePosModel() {
+        
+        // For the feet
+        p_feet.updatePos(this);
+
+        // Update Gun/Hand position
+        weapon.update(p_feet, this);
+
+        // Upadte hand position
+        p_hands.update();
+
+    }
 
     // For pass through platforms
     public void passThroughPlatform() {

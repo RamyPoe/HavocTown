@@ -39,14 +39,12 @@ public class GameScreen implements Screen {
     
     // Player
     CustomEntity player, player2;
-    PlayerConfig pConfig;
 
-    public GameScreen(MainGame game, WorldConfig wConfig, PlayerConfig pConfig) {
+    public GameScreen(MainGame game, WorldConfig wConfig) {
 
         // Save game instance
         this.game = game;
         this.wConfig = wConfig;
-        this.pConfig = pConfig;
 
 
         // For prespective
@@ -68,18 +66,18 @@ public class GameScreen implements Screen {
         Weapon.setWorld(gameWorld);
 
         // Create player
-        player = new CustomEntity(-25, MainGame.V_HEIGHT*2, pConfig);
+        player = new CustomEntity(-25, MainGame.V_HEIGHT*2, MainGame.playerConfig1);
         gameWorld.addPlayer(player);
 
 
-        // Player 2 for testing
-        PlayerConfig ccc = new PlayerConfig();
-        ccc.faceSkin = 1;
-        ccc.hatSkin = 4;
-        ccc.playerColorNumber = 1;
-        ccc.shirtSkin = 4;
+        // // Player 2 for testing
+        // PlayerConfig ccc = new PlayerConfig();
+        // ccc.faceSkin = 1;
+        // ccc.hatSkin = 4;
+        // ccc.playerColorNumber = 1;
+        // ccc.shirtSkin = 4;
 
-        player2 = new CustomEntity(-125, MainGame.V_HEIGHT*2, pConfig);
+        player2 = new CustomEntity(-125, MainGame.V_HEIGHT*2, MainGame.playerConfig2);
         gameWorld.addPlayer(player2);
 
         // Starting camera position

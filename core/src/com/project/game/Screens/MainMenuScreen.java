@@ -91,7 +91,7 @@ public class MainMenuScreen implements Screen {
         switch(buttonPressed) {
 
             case BTN_TUTORIAL:
-                game.transition.fadeOut(MainGame.SCREENS.Tutorial);
+                game.transition.fadeOut(MainGame.SCREENS.SkinSelect);
                 break;
             case BTN_CUSTOM_GAME:
                 // game.transition.fadeOut(MainGame.SCREENS.Tutorial);

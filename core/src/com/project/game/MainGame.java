@@ -9,18 +9,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.project.game.Player.PlayerConfig;
 import com.project.game.Screens.GameScreen;
 import com.project.game.Screens.MainMenuScreen;
+import com.project.game.Screens.SkinSelectScreen;
 import com.project.game.Transition.Transition;
 import com.project.game.World.WorldConfig;
 
 public class MainGame extends Game {
 
 	// For switching screens
-	public static enum SCREENS {MainMenu, Tutorial};
+	public static enum SCREENS {MainMenu, Tutorial, SkinSelect};
 	private static SCREENS cur_screen = SCREENS.MainMenu;
 	private static SCREENS new_screen = SCREENS.MainMenu;
 
 	// Player configurations
-	public PlayerConfig playerConfiguration;
+	public static PlayerConfig playerConfig1;
+	public static PlayerConfig playerConfig2;
 	
 	// Screen Constants
 	public static final int V_WIDTH = 1536;
@@ -50,7 +52,8 @@ public class MainGame extends Game {
 		transition.setGame(this);
 		
 		// For player skin selection
-		playerConfiguration = new PlayerConfig();
+		playerConfig1 = new PlayerConfig();
+		playerConfig2 = new PlayerConfig();
 
 		// Start with MainMenuScreen
 		setScreen(
@@ -109,18 +112,22 @@ public class MainGame extends Game {
 					// WorldConfig.writeConfigFile(config);
 					*/
 					
-					playerConfiguration.hatSkin = -1;
-					playerConfiguration.shirtSkin = -1;
-					playerConfiguration.faceSkin = 3;
-					playerConfiguration.playerColorNumber = 0;
+					playerConfig1.hatSkin = -1;
+					playerConfig1.shirtSkin = -1;
+					playerConfig1.faceSkin = 3;
+					playerConfig1.playerColorNumber = 0;
+
+					playerConfig2.hatSkin = -1;
+					playerConfig2.shirtSkin = -1;
+					playerConfig2.faceSkin = 3;
+					playerConfig2.playerColorNumber = 0;
 
 					WorldConfig wConfig = WorldConfig.readConfigFile("a");
 
 					setScreen(
 						new GameScreen(
 							this,
-							wConfig,
-							playerConfiguration
+							wConfig
 						)
 					);
 				
@@ -130,6 +137,14 @@ public class MainGame extends Game {
 
 					setScreen(
 						new MainMenuScreen(this)
+					);
+
+					break;
+				
+				case SkinSelect:
+
+					setScreen(
+						new SkinSelectScreen(this)
 					);
 
 					break;

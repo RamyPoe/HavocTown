@@ -35,7 +35,7 @@ public abstract class Weapon {
     protected int gun_length;
     protected int bulletSpeed;
     protected int reloadTime;
-    protected int reloadTimer;
+    protected long reloadTimer;
     protected boolean reloading = false;
     protected int max_ammo;
     protected int ammo;
@@ -169,6 +169,8 @@ public abstract class Weapon {
                     Throwable t = new Throwable(p.getX()+CustomEntity.P_WIDTH/2 + (flip?1:-1)*(weaponEndX+60), p.getY() + weaponEndY + 50, weaponTextures[weaponNumber], flip);
                     gameWorld.addThrowable(t);
                     wpnImage.setVisible(false);
+
+                    // System.out.println("HERE");
     
                 // Spawn the new weapon back
                 } else {
@@ -253,13 +255,14 @@ public abstract class Weapon {
         if (ammo <= 0) {
 
             if (!reloading)
-                reloadTimer = (int) MainGame.getTimeMs();
+                reloadTimer = MainGame.getTimeMs();
             reloading = true;
             
 
             if (reloading && MainGame.getTimeMs()-reloadTimer >= reloadTime) {
                 ammo = max_ammo;
                 reloading = false;
+
 
                 if (disposable) {
                     p.giveWeapon(
