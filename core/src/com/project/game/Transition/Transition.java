@@ -1,6 +1,12 @@
+/*
+* Draws the black transition between screens
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Transition;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;

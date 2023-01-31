@@ -1,3 +1,12 @@
+/*
+* Holds instances of the weapons class with
+* pre-determined constants to simulate the
+* different game-weapons
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Weapons;
 
 import com.project.game.Player.CustomEntity;

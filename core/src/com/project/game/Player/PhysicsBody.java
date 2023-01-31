@@ -1,3 +1,11 @@
+/*
+* Class that computes displacement by integrating
+* acceleration and velocity with respect to time.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Player;
 
 public class PhysicsBody {

@@ -1,9 +1,15 @@
+/*
+* Extends from the weapons class to include
+* the extra requirments of a shotgun. This
+* includes shot angle, and density.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Weapons;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.utils.Array;
-import com.project.game.MainGame;
 import com.project.game.Player.CustomEntity;
 
 public class Shotgun extends Weapon {

@@ -1,3 +1,12 @@
+/*
+* What a weapon will turn into when it has
+* no more ammo. It can collide with other players
+* and apply knockback.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Weapons;
 
 import com.badlogic.gdx.graphics.Texture;

@@ -1,6 +1,13 @@
-package com.project.game.Player;
+/*
+* Class that represents a game player. Movement
+* is affected by physics elements and computed
+* animations.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
 
-import java.util.ArrayList;
+package com.project.game.Player;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
@@ -37,6 +44,7 @@ public class CustomEntity implements Disposable {
     public boolean grounded = false;
     public boolean applying_force = false;
     public Platform touching;
+    public int lives;
 
     // True facing right, False facing left
     public boolean flip;
@@ -102,6 +110,9 @@ public class CustomEntity implements Disposable {
 
     // Reset player for spawning
     public void reset() {
+
+        // Means we died
+        lives--;
 
         // Default weapon
         this.giveWeapon(GunLibrary.pistol(this));

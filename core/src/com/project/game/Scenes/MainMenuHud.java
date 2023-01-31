@@ -1,3 +1,11 @@
+/*
+* Creates and lays out buttons for main menu,
+* as well as the background texture.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Scenes;
 
 import com.badlogic.gdx.Gdx;
@@ -23,10 +31,8 @@ public class MainMenuHud implements Disposable {
     public Texture backgroundTexture;
 
     // Buttons
-    public MenuButton campaignGameButton;
     public MenuButton customGameButton;
     public MenuButton tutorialGameButton;
-    public MenuButton settingsButton;
 
 
     public MainMenuHud(SpriteBatch sb) {
@@ -39,34 +45,24 @@ public class MainMenuHud implements Disposable {
         stage = new Stage(viewport, sb);
 
         // Background image
-        backgroundTexture = new Texture(Gdx.files.internal("maps/1.jpg"));
+        backgroundTexture = new Texture(Gdx.files.internal("other/1.jpg"));
 
         // Buttons
-        campaignGameButton = new MenuButton("CAMPAIGN", "story mode");
         customGameButton = new MenuButton("CUSTOM GAME", "custom game");
         tutorialGameButton = new MenuButton("TUTORIAL", "learn game controls");
-        settingsButton = new MenuButton("SETTINGS", "change game settings");
 
         
-
         // Table
         Table table = new Table();
         table.setFillParent(true);
         table.top().right();
         table.padRight(20);
-        table.padTop(20);
-
-        // Spacing from top
-        table.row().padTop(200);
+        table.padTop(60);
 
         // Add buttons to table
-        table.add(campaignGameButton).align(Align.right);
-        table.row();
-        table.add(customGameButton).align(Align.right);
+        table.add(customGameButton).align(Align.right).padBottom(20);
         table.row();
         table.add(tutorialGameButton).align(Align.right);
-        table.row();
-        table.add(settingsButton).align(Align.right);
 
 
         // Add table to stage

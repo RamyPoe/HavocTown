@@ -2,7 +2,6 @@ package com.project.game;
 
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
-import com.project.game.MainGame;
 
 // Please note that on macOS your application needs to be started with the -XstartOnFirstThread JVM argument
 public class DesktopLauncher {
@@ -12,6 +11,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setTitle("HavocTown");
 		config.setWindowedMode(MainGame.V_WIDTH, MainGame.V_HEIGHT);
+		config.setResizable(false);
 
 		new Lwjgl3Application(new MainGame(), config);
 	}

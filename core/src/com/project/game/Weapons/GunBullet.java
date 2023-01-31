@@ -1,3 +1,13 @@
+/*
+* Bullet that will travel on any angle for a fixed
+* length until it collides with something. Applies
+* a knockback force proportional to the distance it
+* has traveled.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Weapons;
 
 import com.badlogic.gdx.Gdx;

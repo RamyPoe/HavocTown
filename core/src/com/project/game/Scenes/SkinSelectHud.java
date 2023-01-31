@@ -1,9 +1,18 @@
+/*
+* Holds all the classes responsible for the skin
+* select screen. includes a player model to show
+* the current equipped cosmetics, and a search bar
+* to find different cosmetics based on pre-entered
+* keywords.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Scenes;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
@@ -18,9 +27,12 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -35,7 +47,63 @@ import com.project.game.Player.PlayerConfig;
 import com.project.game.Scenes.CosmeticStruct.CosmType;
 
 public class SkinSelectHud implements Disposable {
- 
+    
+    // For other classes to use
+    public static TextButtonStyle btnStyle;
+    public static TextFieldStyle fieldStyle;
+    public static LabelStyle lblStyle;
+    static {
+        // Create instances
+        btnStyle = new TextButtonStyle();
+        fieldStyle = new TextFieldStyle();
+        lblStyle = new LabelStyle();
+        
+        // File handle
+        FileHandle fontFileHandle = Gdx.files.internal("fonts/skinselect-font.ttf");
+
+        // Load Fonts
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFileHandle);
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+
+        // Set parameters
+        parameter.size = 90;
+        parameter.color = Color.BLACK;
+        parameter.borderWidth = 2f;
+        parameter.borderColor = Color.GRAY;
+        
+        // Save font
+        btnStyle.font = generator.generateFont(parameter);
+
+        // Set param for label
+        parameter.size = 100;
+        parameter.color = Color.WHITE;
+        parameter.borderColor = Color.WHITE;
+        parameter.borderWidth = 0f;
+
+        // Save font
+        lblStyle.font = generator.generateFont(parameter);
+
+        // Set parameter for TextField
+        parameter.color = Color.WHITE;
+        parameter.borderWidth = 0f;
+        parameter.borderColor = Color.WHITE;
+
+        // Save font
+        fieldStyle.font = generator.generateFont(parameter);
+        fieldStyle.fontColor = Color.WHITE;
+        fieldStyle.focusedFontColor = Color.WHITE;
+        fieldStyle.disabledFontColor = Color.GRAY;
+
+        // Textures
+        fieldStyle.cursor = new TextureRegionDrawable(MainGame.createTexture(3, 10, Color.BLACK));
+        fieldStyle.background = new TextureRegionDrawable(MainGame.createTexture(800, 100, Color.valueOf("aaaaaa")));
+        
+        // Clear memory
+        generator.dispose();
+        generator = null;
+        parameter = null;
+    }
+
     // If we have popup
     private boolean isPopup;
 
@@ -44,12 +112,15 @@ public class SkinSelectHud implements Disposable {
     public Viewport viewport;
     private OrthographicCamera cam;
 
-    // Mini HUD
-    SkinSelector SSp1, SSp2;
-
-    // Search bar
+    // Hud elements
+    private SkinSelector SSp1, SSp2;
     private SearchPopup searchPopup;
+    private MapSelector mapSelector;
 
+    // Signal that we should transition
+    public boolean done = false;
+
+    // Constructor
     public SkinSelectHud(SpriteBatch sb) {
         
         // For prespective
@@ -62,7 +133,8 @@ public class SkinSelectHud implements Disposable {
         // Table
         Table table = new Table();
         table.setFillParent(true);
-        table.center().left();
+        table.top().left();
+        table.padTop(120);
 
         // Start without popup
         isPopup = false;
@@ -76,12 +148,22 @@ public class SkinSelectHud implements Disposable {
         searchPopup.setPosition(MainGame.V_WIDTH/2-SearchPopup.WIDTH/2, MainGame.V_HEIGHT/2-SearchPopup.HEIGHT/2);
         searchPopup.setVisible(false);
 
+        // Map selector
+        mapSelector = new MapSelector();
+
+
+        // Create label at bottom of screen
+        Label lbl = new Label("SELECT MAP WHEN READY", lblStyle);
+        lbl.setPosition(120, 60);
+
         // Add to Table
         table.add(SSp1).padLeft(50);
         table.add(SSp2).padLeft(70);
 
         // Add table to stage
         stage.addActor(table);
+        stage.addActor(lbl);
+        stage.addActor(mapSelector);
         stage.addActor(searchPopup);
 
         // Debug
@@ -91,8 +173,6 @@ public class SkinSelectHud implements Disposable {
 
     // Sperate logic from drawing
     public void update() {
-
-        System.out.println(MainGame.playerConfig1.playerColorNumber);
 
         // Set popup based on boolean
         searchPopup.setVisible(isPopup);
@@ -106,6 +186,7 @@ public class SkinSelectHud implements Disposable {
         if (isPopup) { 
             SSp1.checkClicked();
             SSp2.checkClicked();
+            mapSelector.checkClicked();
             return;
         }
 
@@ -117,6 +198,9 @@ public class SkinSelectHud implements Disposable {
         if (SSp2.checkClicked()) {
             searchPopup.setConfig(SSp2.getConfig());
             isPopup = true;
+        }
+        if (mapSelector.checkClicked()) {
+            done = true;
         }
 
 
@@ -156,51 +240,6 @@ class SearchPopup extends Group implements Disposable {
     // Config that we're changing
     PlayerConfig pConfig;
 
-    // Styles for buttons and fields
-    private static TextButtonStyle btnStyle;
-    private static TextFieldStyle fieldStyle;
-    static {
-        // Create instances
-        btnStyle = new TextButtonStyle();
-        fieldStyle = new TextFieldStyle();
-        
-        // File handle
-        FileHandle fontFileHandle = Gdx.files.internal("fonts/skinselect-font.ttf");
-
-        // Load Fonts
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFileHandle);
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-
-        // Set parameters
-        parameter.size = 48;
-        parameter.color = Color.BLACK;
-        parameter.borderWidth = 2f;
-        parameter.borderColor = Color.GRAY;
-        
-        // Save font
-        btnStyle.font = generator.generateFont(parameter);
-
-        // Set parameter for TextField
-        parameter.color = Color.WHITE;
-        parameter.borderWidth = 0f;
-        parameter.borderColor = Color.WHITE;
-
-        // Save font
-        fieldStyle.font = generator.generateFont(parameter);
-        fieldStyle.fontColor = Color.WHITE;
-        fieldStyle.focusedFontColor = Color.WHITE;
-        fieldStyle.disabledFontColor = Color.GRAY;
-
-        // Textures
-        fieldStyle.cursor = new TextureRegionDrawable(MainGame.createTexture(3, 30, Color.BLACK));
-        fieldStyle.background = new TextureRegionDrawable(MainGame.createTexture(800, 100, Color.valueOf("aaaaaa")));
-        
-        // Clear memory
-        generator.dispose();
-        generator = null;
-        parameter = null;
-    }
-
     // Input
     TextField searchField;
     private TextButton closeBtn;
@@ -233,8 +272,8 @@ class SearchPopup extends Group implements Disposable {
         backImage = new Image(backTexture);
 
         // Create close button
-        closeBtn = new TextButton("X", btnStyle);
-        closeBtn.setPosition(WIDTH-40, HEIGHT-60);
+        closeBtn = new TextButton("x", SkinSelectHud.btnStyle);
+        closeBtn.setPosition(WIDTH-50, HEIGHT-80);
 
         // Button listener
         closeBtn.addListener( new ClickListener() {              
@@ -245,7 +284,7 @@ class SearchPopup extends Group implements Disposable {
         });
 
         // Create the text field
-        searchField = new TextField("", fieldStyle);
+        searchField = new TextField("", SkinSelectHud.fieldStyle);
         searchField.setSize(800, 100);
         searchField.setPosition(WIDTH/2-800/2, HEIGHT-150);
         searchField.setBlinkTime(0.5f);
@@ -455,8 +494,10 @@ class SearchPopup extends Group implements Disposable {
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
-        
+        for (CosmeticStruct c : allTextures) {
+            c.dispose();
+        }
+        allTextures = null;
     }
 
 }
@@ -524,12 +565,12 @@ class CosmeticStruct implements Disposable {
 
 }
 
-class SkinSelector extends Group {
+class SkinSelector extends Group implements Disposable {
 
     // Static textures
     private static Texture backTexture;
     static {
-        backTexture = MainGame.createTexture(300, 600, Color.WHITE);
+        backTexture = MainGame.createTexture(300, 500, Color.WHITE);
     }
 
     // Images
@@ -539,32 +580,7 @@ class SkinSelector extends Group {
     private PlayerConfig pConfig;
     private CustomEntity pModel;
 
-    // Edit button to pullup search bar
-    private static TextButtonStyle btnStyle;
-    static {
-        btnStyle = new TextButtonStyle();
-        
-        // File handle
-        FileHandle fontFileHandle = Gdx.files.internal("fonts/skinselect-font.ttf");
-
-        // Load Fonts
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFileHandle);
-        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-
-        // Set parameters
-        parameter.size = 96;
-        parameter.color = Color.BLACK;
-        parameter.borderWidth = 2f;
-        parameter.borderColor = Color.GRAY;
-        
-        // Save font
-        btnStyle.font = generator.generateFont(parameter);
-        
-        // Clear memory
-        generator.dispose();
-        generator = null;
-        parameter = null;
-    }
+    // Button to call popup
     private TextButton editBtn;
 
     // Click state to be read
@@ -584,9 +600,9 @@ class SkinSelector extends Group {
         backImg = new Image(backTexture);
 
         // Create button
-        editBtn = new TextButton("EDIT", btnStyle);
+        editBtn = new TextButton("EDIT", SkinSelectHud.btnStyle);
         editBtn.setSize(200, 100);
-        editBtn.setPosition(50, 100);
+        editBtn.setPosition(50, 80);
 
         // Button listener
         editBtn.addListener( new ClickListener() {              
@@ -634,10 +650,102 @@ class SkinSelector extends Group {
         pModel.flip = true;
 
         // Draw the player model
-        for (int i = 0; i < 10; i++) { pModel.updatePosModel(); }
+        for (int i = 0; i < 20; i++) { pModel.updatePosModel(); }
         pModel.draw(batch);
 
     }
 
+    @Override
+    public void dispose() {
+        pModel.dispose();
+    }
+    
 
+}
+
+
+class MapSelector extends Table implements Disposable {
+
+    // Textures
+    Texture aTexture, bTexture, cTexture;
+
+    // For checking click
+    private boolean clicked = false;
+
+    // Constructor
+    public MapSelector() {
+
+        // Super
+        super();
+
+        // Load textures if missing
+        loadAllTextures();
+
+        // Create the buttons
+        ImageButton aButton = new ImageButton(new TextureRegionDrawable(aTexture));
+        ImageButton bButton = new ImageButton(new TextureRegionDrawable(bTexture));
+        ImageButton cButton = new ImageButton(new TextureRegionDrawable(cTexture));
+
+        // Add Listeners
+        aButton.addListener( new ClickListener() {              
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                MainGame.mapChosen = "a";
+                clicked = true;
+            };
+        });
+        bButton.addListener( new ClickListener() {              
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                MainGame.mapChosen = "b";
+                clicked = true;
+            };
+        });
+        cButton.addListener( new ClickListener() {              
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                MainGame.mapChosen = "c";
+                clicked = true;
+            };
+        });
+
+        // Add to table
+        this.setFillParent(true);
+        this.center().right();
+        this.padRight(50);
+
+        this.add(aButton).padBottom(20);
+        this.row();
+        this.add(bButton).padBottom(20);
+        this.row();
+        this.add(cButton).padBottom(20);
+
+    }
+
+    
+    // Load textures
+    public void loadAllTextures() {
+        if (aTexture == null) { aTexture = new Texture(Gdx.files.internal("other/a.png")); }
+        if (bTexture == null) { bTexture = new Texture(Gdx.files.internal("other/b.png")); }
+        if (cTexture == null) { cTexture = new Texture(Gdx.files.internal("other/c.png")); }
+    }    
+
+    // Check if our button has been pressed
+    public boolean checkClicked() {
+        boolean temp = clicked;
+        clicked = false;
+        return temp;
+    }
+
+    // Clear memory
+    @Override
+    public void dispose() {
+        aTexture.dispose();
+        bTexture.dispose();
+        cTexture.dispose();
+        
+        aTexture = null;
+        bTexture = null;
+        cTexture = null;
+    }
 }

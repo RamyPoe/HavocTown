@@ -1,5 +1,13 @@
-package com.project.game.Player;
+/*
+* The hands element of the CustomEntity class. It
+* is animated and must move in unison with the
+* weapon.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
 
+package com.project.game.Player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

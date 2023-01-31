@@ -1,7 +1,15 @@
+/*
+* A configuration file for the world
+* map. This class is passed to the game
+* screen so that we know which map to load.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.World;
 
 import java.util.*;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;

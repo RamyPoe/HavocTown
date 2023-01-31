@@ -1,3 +1,12 @@
+/*
+* The main class where the program begins. It 
+* delegates screen behaviour and holds common
+* variables as class elements.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game;
 
 import com.badlogic.gdx.Game;
@@ -10,19 +19,21 @@ import com.project.game.Player.PlayerConfig;
 import com.project.game.Screens.GameScreen;
 import com.project.game.Screens.MainMenuScreen;
 import com.project.game.Screens.SkinSelectScreen;
+import com.project.game.Screens.TutorialScreen;
 import com.project.game.Transition.Transition;
 import com.project.game.World.WorldConfig;
 
 public class MainGame extends Game {
 
 	// For switching screens
-	public static enum SCREENS {MainMenu, Tutorial, SkinSelect};
+	public static enum SCREENS {MainMenu, Game, SkinSelect, Tutorial};
 	private static SCREENS cur_screen = SCREENS.MainMenu;
 	private static SCREENS new_screen = SCREENS.MainMenu;
 
 	// Player configurations
 	public static PlayerConfig playerConfig1;
 	public static PlayerConfig playerConfig2;
+	public static String mapChosen = "b";
 	
 	// Screen Constants
 	public static final int V_WIDTH = 1536;
@@ -54,6 +65,17 @@ public class MainGame extends Game {
 		// For player skin selection
 		playerConfig1 = new PlayerConfig();
 		playerConfig2 = new PlayerConfig();
+
+		// Default skins
+		playerConfig1.hatSkin = -1;
+		playerConfig1.shirtSkin = -1;
+		playerConfig1.faceSkin = 3;
+		playerConfig1.playerColorNumber = 0;
+
+		playerConfig2.hatSkin = -1;
+		playerConfig2.shirtSkin = -1;
+		playerConfig2.faceSkin = 3;
+		playerConfig2.playerColorNumber = 0;
 
 		// Start with MainMenuScreen
 		setScreen(
@@ -93,36 +115,9 @@ public class MainGame extends Game {
 			
 			// Change the screen
 			switch (new_screen) {
-				case Tutorial:
+				case Game:
 
-					// Get config for screen
-					/* 
-					WorldConfig config = new WorldConfig();
-					config.setTexturePrefix("a");
-					config.setOffY(0, 600, 0);
-
-					// config.addPlatform(-825, 460, 1640, 40, false);
-					// config.addPlatform(-780, 630, 1350, 40, true);
-					// config.addPlatform(-710, 800, 1060, 40, true);
-					// config.addPlatform(-670, 962, 730, 40, true);
-					config.addPlatform(-790, 1000, 1600, 40, false);
-					config.addPlatform(-615, 1200, 1200, 40, true);
-
-
-					// WorldConfig.writeConfigFile(config);
-					*/
-					
-					playerConfig1.hatSkin = -1;
-					playerConfig1.shirtSkin = -1;
-					playerConfig1.faceSkin = 3;
-					playerConfig1.playerColorNumber = 0;
-
-					playerConfig2.hatSkin = -1;
-					playerConfig2.shirtSkin = -1;
-					playerConfig2.faceSkin = 3;
-					playerConfig2.playerColorNumber = 0;
-
-					WorldConfig wConfig = WorldConfig.readConfigFile("a");
+					WorldConfig wConfig = WorldConfig.readConfigFile(mapChosen);
 
 					setScreen(
 						new GameScreen(
@@ -145,6 +140,14 @@ public class MainGame extends Game {
 
 					setScreen(
 						new SkinSelectScreen(this)
+					);
+
+					break;
+				
+				case Tutorial:
+					
+					setScreen(
+						new TutorialScreen(this)
 					);
 
 					break;

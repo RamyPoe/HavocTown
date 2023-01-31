@@ -1,9 +1,15 @@
+/*
+* Class used for collision detection between
+* two rectangles.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Player;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.project.game.MainGame;
 
 public class Hitbox {
     

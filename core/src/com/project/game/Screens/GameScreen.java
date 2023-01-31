@@ -1,3 +1,11 @@
+/*
+* The Game screen that holds the gameworld
+* and moves players based on keyboard inputs.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Screens;
 
 import com.badlogic.gdx.Gdx;
@@ -8,9 +16,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
-import com.project.game.MainGame.SCREENS;
 import com.project.game.Player.CustomEntity;
-import com.project.game.Player.PlayerConfig;
 import com.project.game.Scenes.PlayerHud;
 import com.project.game.Weapons.Weapon;
 import com.project.game.World.GameWorld;
@@ -65,20 +71,16 @@ public class GameScreen implements Screen {
         // So that weapons can create throwables
         Weapon.setWorld(gameWorld);
 
-        // Create player
+        // Create players
         player = new CustomEntity(-25, MainGame.V_HEIGHT*2, MainGame.playerConfig1);
         gameWorld.addPlayer(player);
 
-
-        // // Player 2 for testing
-        // PlayerConfig ccc = new PlayerConfig();
-        // ccc.faceSkin = 1;
-        // ccc.hatSkin = 4;
-        // ccc.playerColorNumber = 1;
-        // ccc.shirtSkin = 4;
-
         player2 = new CustomEntity(-125, MainGame.V_HEIGHT*2, MainGame.playerConfig2);
         gameWorld.addPlayer(player2);
+
+        // Initial lives
+        player.lives = 3;
+        player2.lives = 3;
 
         // Starting camera position
         cam.position.x = (float) player.pBody.getDx();
@@ -151,7 +153,7 @@ public class GameScreen implements Screen {
         //============================================
 
         // Go back to Main menu
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && !game.transition.active) {
+        if ((Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) || gameWorld.done) && !game.transition.active) {
 
             game.transition.fadeOut(MainGame.SCREENS.MainMenu);
 

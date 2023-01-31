@@ -1,3 +1,11 @@
+/*
+* Inherits the original button class but
+* has memory management for fonts.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Scenes;
 
 import com.badlogic.gdx.Gdx;

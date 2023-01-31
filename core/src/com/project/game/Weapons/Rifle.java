@@ -1,6 +1,12 @@
-package com.project.game.Weapons;
+/*
+* Extends from the weapons class
+* to be more suited toward rifle weapons.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
 
-import java.util.ArrayList;
+package com.project.game.Weapons;
 
 import com.badlogic.gdx.utils.Array;
 import com.project.game.MainGame;

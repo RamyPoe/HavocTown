@@ -1,3 +1,11 @@
+/*
+* The head element of the CustomEntity class. It
+* is also responsible for the face and hat textures.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Player;
 
 import com.badlogic.gdx.Gdx;
@@ -16,8 +24,8 @@ public class Head implements Disposable {
 
 
     // Custom offsets for the different faces
-    private static int[] face_offsetsY = new int[]{0, -8, 0, -5, -22, -6};
-    private static int[] face_offsetsX = new int[]{15, -5, -13, 25, 13, 7};
+    private static int[] face_offsetsY = new int[]{0,  -8,   0, -5, -14, -6};
+    private static int[] face_offsetsX = new int[]{15, -5, -13, 25,  13,  7};
 
     // Config
     PlayerConfig pConfig;

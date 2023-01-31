@@ -1,11 +1,3 @@
-/*
-* The screen used to display the SkinSelectHud
-* and is responsible for transitions with other
-* screens.
-* 
-* @author  Rameen Popal
-* @since   2023-01-31
-*/
 
 package com.project.game.Screens;
 
@@ -13,28 +5,41 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.project.game.MainGame;
-import com.project.game.Scenes.SkinSelectHud;
 
-public class SkinSelectScreen implements Screen {
+public class TutorialScreen implements Screen {
 
-    // To change screens
-    private MainGame game;
+    // Texture that explains game
+    Texture imgTexture;
 
-    // Show players
-    private SkinSelectHud skinSelectHud;
-    
+    // For displaying
+    OrthographicCamera cam;
+    FitViewport vp;
 
-    public SkinSelectScreen(MainGame game) {
+    // Main game
+    MainGame game;
+
+
+    // Constructor
+    public TutorialScreen(MainGame game) {
 
         // Save field
         this.game = game;
-        
-        // Creat hud
-        skinSelectHud = new SkinSelectHud(game.batch);
-       
-        // Set input handler
-        Gdx.input.setInputProcessor(skinSelectHud.stage);
+
+        // Load the image
+        imgTexture = new Texture(Gdx.files.internal("other/tutorial.png"));
+
+        // Camera for drawing
+        cam = new OrthographicCamera();
+        cam.position.x = MainGame.V_WIDTH/2;
+        cam.position.y = MainGame.V_HEIGHT/2;
+        vp = new FitViewport(MainGame.V_WIDTH, MainGame.V_HEIGHT, cam);
+        vp.update(MainGame.V_WIDTH, MainGame.V_HEIGHT);  
+        cam.update();
 
     }
 
@@ -44,33 +49,37 @@ public class SkinSelectScreen implements Screen {
         
     }
 
+    // Seperate logic from drawing
     public void update() {
+
         // Skip button check if transitioning
         if (game.transition.active) {
             return;
         }
 
-        if (skinSelectHud.done) {
-            game.transition.fadeOut(MainGame.SCREENS.Game);
-        }
+        // Check for escape key
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.transition.fadeOut(MainGame.SCREENS.MainMenu);
         }
+        
     }
 
     @Override
     public void render(float delta) {
-        
-        // Seperate logic from draw
-        update();
+        // Seperate logic from drawing
+        update();    
 
         // Reset screen
         Gdx.gl.glClearColor(91/255f, 91/255f, 91/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Draw all stage actors
-        skinSelectHud.draw(game.batch);
+        // Set projection
+        game.batch.setProjectionMatrix(cam.combined);
 
+        // Draw
+        game.batch.begin();
+        game.batch.draw(imgTexture, 0, 0);
+        game.batch.end();
 
         // Transition screen fade in
         if (!game.transition.haveFadedIn && !game.transition.active)
@@ -83,8 +92,8 @@ public class SkinSelectScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // TODO Auto-generated method stub
-        
+        vp.update(width, height);
+        cam.update();
     }
 
     @Override
@@ -107,11 +116,7 @@ public class SkinSelectScreen implements Screen {
 
     @Override
     public void dispose() {
-        
-        skinSelectHud.dispose();
-        
+        imgTexture.dispose();
     }
-
-
 
 }

@@ -1,7 +1,15 @@
+/*
+* Responsible for all game interactions and
+* collisions. Computes changes every frame and
+* draws them to the screen.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.World;
 
 import java.util.*;
-
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Disposable;
 import com.project.game.MainGame;
@@ -28,6 +36,9 @@ public class GameWorld implements Disposable {
 
     // Supply drops
     private Array<SupplyDrop> supplydrops;
+
+    // Game done signal
+    public boolean done = false;
 
 
     // Constructor
@@ -123,6 +134,11 @@ public class GameWorld implements Disposable {
                     p.reset();
 
                 }
+
+            // Check for game end (no more lives)
+            if (p.lives == 0) {
+                done = true;
+            }
         }
 
 

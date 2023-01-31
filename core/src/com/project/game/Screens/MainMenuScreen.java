@@ -1,11 +1,17 @@
+/*
+* Screen used to draw the MainMenuHud
+* and transition with other screens.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.badlogic.gdx.Screen;
 import com.project.game.MainGame;
 import com.project.game.Scenes.MainMenuHud;
@@ -13,7 +19,7 @@ import com.project.game.Scenes.MainMenuHud;
 public class MainMenuScreen implements Screen {
     
     // For reacting to buttons
-    public static enum BUTTONS {BTN_NONE, BTN_CAMPAIGN, BTN_CUSTOM_GAME, BTN_TUTORIAL, BTN_SETTINGS};
+    public static enum BUTTONS {BTN_NONE, BTN_CUSTOM_GAME, BTN_TUTORIAL};
     private BUTTONS buttonPressed = BUTTONS.BTN_NONE;
 
     // To change screens
@@ -21,10 +27,6 @@ public class MainMenuScreen implements Screen {
 
     // For button interaction
     MainMenuHud hud;
-
-    // For prespective
-    private OrthographicCamera cam;
-    private Viewport viewport;
 
     public MainMenuScreen(MainGame game) {
         // Hold onto game instance
@@ -34,13 +36,6 @@ public class MainMenuScreen implements Screen {
         hud = new MainMenuHud(game.batch);
 
         // Button Callbacks
-        hud.campaignGameButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                // Change button pressed
-                buttonPressed = BUTTONS.BTN_CAMPAIGN;
-            }
-        });
         hud.customGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -56,14 +51,7 @@ public class MainMenuScreen implements Screen {
                 buttonPressed = BUTTONS.BTN_TUTORIAL;
             }
         });
-        hud.settingsButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("SETTINGS CLICKED!");
-                // Change button pressed
-                buttonPressed = BUTTONS.BTN_SETTINGS;
-            }
-        });
+    
 
     }
 
@@ -91,10 +79,10 @@ public class MainMenuScreen implements Screen {
         switch(buttonPressed) {
 
             case BTN_TUTORIAL:
-                game.transition.fadeOut(MainGame.SCREENS.SkinSelect);
-                break;
+                game.transition.fadeOut(MainGame.SCREENS.Tutorial);
+            break;
             case BTN_CUSTOM_GAME:
-                // game.transition.fadeOut(MainGame.SCREENS.Tutorial);
+                game.transition.fadeOut(MainGame.SCREENS.SkinSelect);
                 break;
 
             default:

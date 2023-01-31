@@ -1,3 +1,11 @@
+/*
+* Drawing a background using three
+* textures and the parallax effect.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.World;
 
 import com.badlogic.gdx.Gdx;

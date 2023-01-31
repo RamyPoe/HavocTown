@@ -1,3 +1,12 @@
+/*
+* Structure that holds variable that may be
+* configured for each player. Each variable
+* respresents a cosmetic choice.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Player;
 
 public class PlayerConfig {

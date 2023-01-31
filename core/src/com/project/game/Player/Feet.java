@@ -1,3 +1,12 @@
+/*
+* The feet element of the CustomEntity class. It
+* is responsible for the collision hitbox with the
+* platforms.
+*
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Player;
 
 import com.badlogic.gdx.Gdx;

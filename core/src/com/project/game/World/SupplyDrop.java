@@ -1,3 +1,12 @@
+/*
+* A supply drop gets spawned randomly and
+* can assign the respective player a
+* new and more powerful weapon randomly.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.World;
 
 import com.badlogic.gdx.Gdx;
@@ -5,7 +14,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Disposable;
 import com.project.game.Player.CustomEntity;
 import com.project.game.Player.Hitbox;
 import com.project.game.Weapons.GunLibrary;

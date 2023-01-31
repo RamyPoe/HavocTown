@@ -1,6 +1,14 @@
+/*
+* An abstract weapons class that serves as a foundation
+* for the rifle and shotgun class. Holds all common
+* attributes such as reload, ammo, textures, etc.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
+
 package com.project.game.Weapons;
 
-import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;

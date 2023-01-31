@@ -1,5 +1,13 @@
-package com.project.game.Scenes;
+/*
+* Shows the user the players game values
+* including the remaining lives and ammo
+* count.
+* 
+* @author  Rameen Popal
+* @since   2023-01-31
+*/
 
+package com.project.game.Scenes;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -10,7 +18,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -164,6 +171,9 @@ class SingleHud extends Group implements Disposable {
     // Text labels
     private Label nameLbl, livesLbl, ammoLbl;
 
+    // For player count
+    private static int playerNum = 1;
+
     // Constructor
     public SingleHud(CustomEntity player) {
 
@@ -181,9 +191,9 @@ class SingleHud extends Group implements Disposable {
         paletteImg = new Image(palTexture);
         
         // Create Labels
-        nameLbl = new Label("Player 1", nameStyle);
+        nameLbl = new Label("Player " + playerNum, nameStyle); playerNum++;
         livesLbl = new Label("99", livesStyle);
-        ammoLbl = new Label("40", ammoStyle);
+        ammoLbl = new Label("", ammoStyle);
         
         
         // Position relatively
@@ -191,8 +201,8 @@ class SingleHud extends Group implements Disposable {
         paletteImg.setPosition(20, 40);
 
         nameLbl.setPosition(90, 85);
-        livesLbl.setPosition(90, 30);
-        ammoLbl.setPosition(155, 45);
+        livesLbl.setPosition(110, 30);
+        ammoLbl.setPosition(155, 65);
 
         // Add to this group
         this.addActor(backImg);
@@ -214,6 +224,8 @@ class SingleHud extends Group implements Disposable {
 
         // Add logic to change labels
         ammoLbl.setText("" + player.getAmmoCount());
+        livesLbl.setText(player.lives);
+
 
         // Maintain same drawing
         super.draw(batch, parentAlpha);
