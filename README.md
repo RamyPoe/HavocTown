@@ -17,7 +17,7 @@ Clone down this repository. Tested on `Windows 10` and `Windows 11`. Setup instr
 
 #### Game
 
-Has been compiled to `HavocTown.zip`. The executable can be run. The java runtime is included in the package.
+Has been compiled and posted as a release. The executable can be run. The java runtime will be included in the package. Alternatively you can recompile given source code and assets.
 
 
 ## Reflection
