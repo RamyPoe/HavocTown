@@ -4,7 +4,7 @@ ___
 
 ## Project Screen Shots
 
-![ALT](https://i.ibb.co/nLtDH1g/1.png)
+![ALT](https://github.com/RamyPoe/HavocTown/blob/main/images/1.png?raw=true)
 ![ALT](https://i.ibb.co/ZY0TNPD/2.png)
 ![ALT](https://i.ibb.co/qRbm9Zj/3.png)
 ![ALT](https://i.ibb.co/VCkQVJZ/4.png)
