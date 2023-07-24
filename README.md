@@ -5,11 +5,11 @@ ___
 ## Project Screen Shots
 
 ![ALT](https://github.com/RamyPoe/HavocTown/blob/main/images/1.png?raw=true)
-![ALT](https://i.ibb.co/ZY0TNPD/2.png)
-![ALT](https://i.ibb.co/qRbm9Zj/3.png)
-![ALT](https://i.ibb.co/VCkQVJZ/4.png)
-![ALT](https://i.ibb.co/xYhGxBb/5.png)
-![ALT](https://i.ibb.co/BP8tCYD/ezgif-com-optimize.gif)
+![ALT](https://github.com/RamyPoe/HavocTown/blob/main/images/2.png?raw=true)
+![ALT](https://github.com/RamyPoe/HavocTown/blob/main/images/3.png?raw=true)
+![ALT](https://github.com/RamyPoe/HavocTown/blob/main/images/4.png?raw=true)
+![ALT](https://github.com/RamyPoe/HavocTown/blob/main/images/5.png?raw=true)
+![ALT](https://github.com/RamyPoe/HavocTown/blob/main/images/6.gif?raw=true)
 
 ## Installation and Setup Instructions
 
